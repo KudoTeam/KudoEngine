@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KudoEngine.KudoEngine
+namespace KudoEngine.Engine
 {
     public class Vector2
     {
@@ -17,19 +17,18 @@ namespace KudoEngine.KudoEngine
             Y = Zero().Y;
         }
 
-        public Vector2(float X, float Y)
+        public Vector2(float x, float y)
         {
-            this.X = X;
-            this.Y = Y;
+            X = x;
+            Y = y;
         }
 
         /// <summary>
         /// Returns X and Y as 0
         /// </summary>
-        /// <returns></returns>
         public static Vector2 Zero()
         {
-            return new Vector2(0, 0);
+            return new(0, 0);
         }
     }
 }
