@@ -45,6 +45,8 @@ namespace KudoEngine.Engine
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine($"[ERR] {message}");
+            Console.ReadKey();
+            Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.White;
         }
     }

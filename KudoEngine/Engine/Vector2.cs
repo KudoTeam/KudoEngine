@@ -8,7 +8,7 @@ namespace KudoEngine.Engine
 {
     public class Vector2
     {
-        public  float X { get; set; }
+        public float X { get; set; }
         public float Y { get; set; }
 
         public Vector2()

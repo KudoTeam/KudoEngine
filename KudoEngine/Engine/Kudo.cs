@@ -30,6 +30,10 @@ namespace KudoEngine.Engine
         /// Window Background Color
         /// </summary>
         public Color Skybox = Color.White;
+        /// <summary>
+        /// Current Camera
+        /// </summary>
+        public Camera ActiveCamera = new(new(),1);
 
         public Kudo(Vector2 screenSize, string title)
         {
@@ -104,13 +108,19 @@ namespace KudoEngine.Engine
             Graphics g = e.Graphics;
             // Clear screen
             g.Clear(Skybox);
+            // Adjust Camera Position
+            g.TranslateTransform(-ActiveCamera.Position.X, -ActiveCamera.Position.Y);
+            // Adjust Camera Rotation
+            g.RotateTransform(ActiveCamera.Rotation);
+            // Adjust Camera Zoom
+            g.ScaleTransform(ActiveCamera.Zoom, ActiveCamera.Zoom);
             // Draw shapes
-            foreach(Shape2D shape in Shapes2D)
+            foreach (Shape2D shape in Shapes2D)
             {
                 g.FillRectangle(new SolidBrush(shape.Color), shape.Position.X, shape.Position.Y, shape.Scale.X, shape.Scale.Y);
             }
             // Draw sprites
-            foreach(Sprite2D sprite in Sprites2D)
+            foreach (Sprite2D sprite in Sprites2D)
             {
                 g.DrawImage(sprite.Sprite, sprite.Position.X, sprite.Position.Y, sprite.Scale.X, sprite.Scale.Y);
             }
