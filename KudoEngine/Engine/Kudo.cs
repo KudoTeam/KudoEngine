@@ -43,7 +43,11 @@ namespace KudoEngine.Engine
             Window = new Canvas();
             Window.Size = new Size((int)ScreenSize.X, (int)ScreenSize.Y);
             Window.Text = Title;
+            // Render Screen
             Window.Paint += Renderer;
+            // Check Key Events
+            Window.KeyDown += KeyDown;
+            Window.KeyUp += KeyUp;
 
             // Make a thread to refresh window asynchronously
             GameLoopThread = new Thread(GameLoop/*here*/);
@@ -51,6 +55,16 @@ namespace KudoEngine.Engine
 
             // Start window
             Application.Run(Window);
+        }
+
+        private void KeyDown(object? sender, KeyEventArgs e)
+        {
+            KeyDown(e);
+        }
+
+        private void KeyUp(object? sender, KeyEventArgs e)
+        {
+            KeyUp(e);
         }
 
         void GameLoop()
@@ -140,5 +154,15 @@ namespace KudoEngine.Engine
         /// This runs after the frame is rendered
         /// </summary>
         public abstract void Update();
+
+        /// <summary>
+        /// This runs when a key is pressed
+        /// </summary>
+        public abstract void KeyDown(KeyEventArgs e);
+
+        /// <summary>
+        /// This runs when a key is released
+        /// </summary>
+        public abstract void KeyUp(KeyEventArgs e);
     }
 }

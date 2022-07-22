@@ -10,24 +10,48 @@ namespace KudoEngine
 {
     internal class DemoGame : Kudo
     {
+
+        bool left;
+        bool right;
+        bool up;
+        bool down;
+
+        Vector2 gridSize = new(9, 7);
+
+        public float MovementSpeed = 3f;
+
         string[,] Map =
         {
-            {".",".",".",".",".",".",".",".","."},
-            {".","g",".",".",".",".",".",".","."},
-            {".","g",".",".",".",".","g",".","."},
-            {".","g",".",".",".","g","g","g","."},
-            {".","g","g",".","g","g","g","g","g"},
-            {"g","g","g","g","g","g","g","g","g"},
-            {"g","g","g","g","g","g","g","g","g"},
+            {".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".","."},
+            {".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".","."},
+            {".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".","."},
+            {".",".",".",".",".",".",".",".",".",".",".",".",".",".","g",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".","."},
+            {".",".",".",".","g","g","g","g","g",".",".",".",".",".","g",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".","."},
+            {".",".",".",".",".","g","g","g",".",".",".",".","g","g","g","g","g",".",".",".",".",".",".",".",".",".",".",".",".",".","."},
+            {".",".",".",".",".",".","g",".",".",".",".",".",".",".","g",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".","."},
+            {".",".",".",".",".",".",".",".",".",".",".",".",".",".","g",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".","."},
+            {".",".",".",".",".",".",".","g",".",".",".",".",".",".",".",".",".","g",".",".",".",".",".",".",".",".","b",".",".",".","."},
+            {".",".",".",".",".",".","g","g","g",".",".",".",".",".",".",".","g","g","g",".",".",".","g",".",".","g","g","g","g",".","."},
+            {".",".",".",".",".",".",".","p",".",".",".",".",".",".",".",".",".","p",".",".",".","g","g","g",".","g",".",".","g",".","."},
+            {".",".",".","b",".",".",".","p",".","b",".",".","p","p","p",".",".","p",".",".",".",".","p",".",".","g",".",".","g",".","."},
+            {".","b","g","g","g",".",".","g","g","g","g","g","g","g","g","g","g","g","g","g",".",".","p",".",".","g",".",".","g",".","."},
+            {"g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g"},
+            {"g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g"},
+            {"g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g"},
+            {"g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g"},
 
         };
 
-        public DemoGame() : base(new Vector2(615, 515),"Terraria") { }
+        public DemoGame() : base(new Vector2(615, 515),"Kudo Test Demo") { }
 
         Sprite2D player;
+        Sprite2D eoc;
 
         Camera cam1;
         Camera cam2;
+
+        int eocVelocity = -1;
+        int eocSpeed = 1;
 
         public override void Load()
         {
@@ -38,18 +62,27 @@ namespace KudoEngine
 
             ActiveCamera = cam1;
 
-            player = new(new(150,195), new(50,100), "guide", "Player");
-
             for(int i = 0; i < Map.GetLength(1); i++)
             {
                 for(int j = 0; j < Map.GetLength(0); j++)
                 {
-                    if (Map[j,i] == "g")
+                    if (Map[j, i] == "g")
                     {
-                        new Shape2D(new(i * ScreenSize.X / Map.GetLength(1), j * ScreenSize.Y / Map.GetLength(0)), new(ScreenSize.X / Map.GetLength(1), ScreenSize.Y / Map.GetLength(0)), Color.Yellow, "Ground");
+                        new Shape2D(new(i * ScreenSize.X / gridSize.X, j * ScreenSize.Y / gridSize.Y), new(ScreenSize.X / gridSize.X, ScreenSize.Y / gridSize.Y), Color.DarkGreen, "Ground");
+                    }
+                    else if (Map[j, i] == "b")
+                    {
+                        new Sprite2D(new(i * ScreenSize.X / gridSize.X, j * ScreenSize.Y / gridSize.Y), new(ScreenSize.X / gridSize.X, ScreenSize.Y / gridSize.Y), "bush", "Bush");
+                    } 
+                    else if (Map[j, i] == "p")
+                    {
+                        new Sprite2D(new(i * ScreenSize.X / gridSize.X, j * ScreenSize.Y / gridSize.Y), new(ScreenSize.X / gridSize.X, ScreenSize.Y / gridSize.Y), "plank", "Wood");
                     }
                 }
             }
+
+            eoc = new(new(550, 100), new(400, 200), "eoc", "Boss");
+            player = new(new(150, 195), new(50, 100), "guide", "Player");
         }
 
         public override void Draw()
@@ -60,22 +93,75 @@ namespace KudoEngine
         int timer = 0;
         public override void Update()
         {
-            if (timer % 50 == 0)
+            if (up)
             {
-                if (ActiveCamera == cam1)
-                {
-                    ActiveCamera = cam2;
-                } else
-                {
-                    ActiveCamera = cam1;
-                }
+                player.Position.Y -= MovementSpeed;
+            }
+            if (down)
+            {
+                player.Position.Y += MovementSpeed;
+            }
+            if (left)
+            {
+                player.Position.X -= MovementSpeed;
+            }
+            if (right)
+            {
+                player.Position.X += MovementSpeed;
             }
 
             cam1.Position.X = player.Position.X - ScreenSize.X / 2 + player.Scale.X / 2;
-            cam1.Rotation += 1f;
+            cam1.Position.Y = player.Position.Y - ScreenSize.Y / 2 + player.Scale.Y / 2;
 
-            cam2.Zoom += 0.01f;
-            timer++;
+            if (eoc.Position.X <= 300)
+            {
+                eocVelocity = 1;
+            } else if (eoc.Position.X >= 600)
+            {
+                eocVelocity = -1;
+            }
+
+            eoc.Position.X += eocSpeed * eocVelocity;
+        }
+
+        public override void KeyDown(KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Up)
+{
+                up = true;
+            }
+            if (e.KeyCode == Keys.Down)
+            {
+                down = true;
+            }
+            if (e.KeyCode == Keys.Left)
+            {
+                left = true;
+            }
+            if (e.KeyCode == Keys.Right)
+            {
+                right = true;
+            }
+        }
+
+        public override void KeyUp(KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Up)
+            {
+                up = false;
+            }
+            if (e.KeyCode == Keys.Down)
+            {
+                down = false;
+            }
+            if (e.KeyCode == Keys.Left)
+            {
+                left = false;
+            }
+            if (e.KeyCode == Keys.Right)
+            {
+                right = false;
+            }
         }
     }
 }
