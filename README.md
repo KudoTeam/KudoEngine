@@ -1,3 +1,12 @@
-# KudoEngine
+For more info, see the [wiki](https://github.com/kubgus/KudoEngine/wiki).
 
-The all-in-one simple game engine made by me.
+# Why KudoEngine?
+KudoEngine is a low-level 2D game engine with everything you need to make a good game.  
+  
+## Pros
+* You are in control
+* Simple
+* Intuitive
+* Open-source
+## Cons
+* Small feature-set
