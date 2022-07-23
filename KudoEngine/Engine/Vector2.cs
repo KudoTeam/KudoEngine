@@ -11,12 +11,18 @@ namespace KudoEngine.Engine
         public float X { get; set; }
         public float Y { get; set; }
 
+        /// <summary>
+        /// Initialize a new Vector2 with values 0, 0
+        /// </summary>
         public Vector2()
         {
             X = Zero().X;
             Y = Zero().Y;
         }
 
+        /// <summary>
+        /// Initialize a new Vector2 with values
+        /// </summary>
         public Vector2(float x, float y)
         {
             X = x;
@@ -24,7 +30,7 @@ namespace KudoEngine.Engine
         }
 
         /// <summary>
-        /// Returns X and Y as 0
+        /// Returns <see langword="X"/> and <see langword="Y"/> as 0
         /// </summary>
         public static Vector2 Zero()
         {

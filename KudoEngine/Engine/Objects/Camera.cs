@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace KudoEngine.Engine.Objects
 {
+    /// <summary>
+    /// <see langword="Object"/>
+    /// This object allows the player to see the scene
+    /// </summary>
     public class Camera
     {
         // TODO: Sync camera position with zoom
@@ -14,6 +18,9 @@ namespace KudoEngine.Engine.Objects
         public float Rotation;
         public float Zoom;
 
+        /// <summary>
+        /// Initialize a new Camera
+        /// </summary>
         public Camera(Vector2 position, float rotation = 0f, float zoom = 1f)
         {
             Position = position;

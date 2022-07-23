@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using KudoEngine.Engine;
 using System.Drawing;
+using KudoEngine.Engine;
 using KudoEngine.Engine.Objects;
 using KudoEngine.Engine.Extenders;
 
@@ -30,6 +30,7 @@ namespace KudoEngine
 
         Sprite2D player;
         BoxCollider2D playerCollider;
+        Physics2D playerPhysics;
         Sprite2D eoc;
         BoxCollider2D eocCollider;
 
@@ -50,7 +51,7 @@ namespace KudoEngine
             {
                 for (int j = 0; j <= height; j++)
                 {
-                    if (Map.GetLength(0) >= Map.GetLength(0) - 1 - j)
+                    if (0 <= Map.GetLength(0) - 1 - j)
                     {
                         Map[Map.GetLength(0) - 1 - j, i] = "g";
                     }
@@ -104,7 +105,7 @@ namespace KudoEngine
                     }
                 }
             }
-        } 
+        }
 
         public override void Load()
         {
@@ -122,8 +123,9 @@ namespace KudoEngine
 
             eoc = new(new(550, 100), new(400, 200), "eoc", "Boss");
             eocCollider = new(eoc, "bosses", -30f);
-            player = new(new(150, 266), new(50, 100), "guide", "Player");
+            player = new(new(150, 150), new(50, 100), "guide", "Player");
             playerCollider = new(player, "player", -5f);
+            playerPhysics = new Physics2D(playerCollider, new(new string[] {"tiles"}));
 
             // This is duplicate code, but I want bushed to render before the player
             // TODO: Add rendering layers
@@ -145,7 +147,7 @@ namespace KudoEngine
         }
 
         public void stopMovementOnCollision() {
-            if (playerCollider.IsColliding("tiles"))
+            if (playerCollider.IsColliding(new(new string[] {"tiles"})))
             {
                 player.Position.X = lastPos.X;
                 player.Position.Y = lastPos.Y;
@@ -160,32 +162,30 @@ namespace KudoEngine
         int timer = 0;
         public override void Update()
         {
+            playerPhysics.Update();
+
             float MovementSpeed = DefaultMovementSpeed;
 
-            if (playerCollider.IsColliding("bushes"))
+            if (playerCollider.IsColliding(new(new string[] { "bushes" })))
             {
                 MovementSpeed /= 5f;
             }
 
             if (up)
             {
-                player.Position.Y -= MovementSpeed;
-                stopMovementOnCollision();
+                playerPhysics.Velocity.Y = -MovementSpeed;
             }
             if (down)
             {
                 player.Position.Y += MovementSpeed;
-                stopMovementOnCollision();
             }
             if (left)
             {
                 player.Position.X -= MovementSpeed;
-                stopMovementOnCollision();
             }
             if (right)
             {
                 player.Position.X += MovementSpeed;
-                stopMovementOnCollision();
             }
 
             cam1.Position.X = player.Position.X - ScreenSize.X / 2 + player.Scale.X / 2;
@@ -201,7 +201,7 @@ namespace KudoEngine
 
             eoc.Position.X += eocSpeed * eocVelocity;
 
-            if (playerCollider.IsColliding("bosses"))
+            if (playerCollider.IsColliding(new(new string[] { "bosses" })))
             {
                 player.Kill();
                 Skybox = Color.DarkRed;
@@ -213,10 +213,6 @@ namespace KudoEngine
             if (e.KeyCode == Keys.Up)
 {
                 up = true;
-            }
-            if (e.KeyCode == Keys.Down)
-            {
-                down = true;
             }
             if (e.KeyCode == Keys.Left)
             {

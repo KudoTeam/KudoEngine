@@ -65,7 +65,7 @@ namespace KudoEngine.Engine
         // Abort thread when quitting to avoid memory leaks
         private void Quit(object? sender, FormClosingEventArgs e)
         {
-            GameLoopThread.Abort();
+            // TODO: Abort thread
         }
 
         #region HardwareInteractions

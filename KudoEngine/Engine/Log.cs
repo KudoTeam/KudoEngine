@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace KudoEngine.Engine
 {
+    /// <summary>
+    /// A simple good-looking console extension
+    /// </summary>
     internal class Log
     {
         /// <summary>
