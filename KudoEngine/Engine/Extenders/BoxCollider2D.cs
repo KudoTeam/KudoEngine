@@ -21,18 +21,23 @@ namespace KudoEngine.Engine.Extenders
         /// <summary>
         /// Size of collider relative to Subject
         /// </summary>
-        public float Offset = 0f;
+        public Vector2 ScaleModifier = new();
+        /// <summary>
+        /// Position of collider relative to Subject
+        /// </summary>
+        public Vector2 PositionModifier = new();
 
         /// <summary>
         /// Initialize a new BoxCollider2D for a Shape2D
         /// </summary>
         /// <param name="tag">A Name to differentiate between Colliders</param>
         /// <param name="offset">Size of collider relative to Subject</param>
-        public BoxCollider2D(Shape2D shape, string tag = "", float offset = 0f)
+        public BoxCollider2D(Shape2D shape, string tag = "", Vector2 scaleModifier = null, Vector2 positionModifier = null)
         {
             Subject = shape;
             Tag = tag;
-            Offset = offset;
+            ScaleModifier = scaleModifier ?? new();
+            PositionModifier = positionModifier ?? new();
 
             Kudo.AddBoxCollider2D(this);
         }
@@ -42,11 +47,12 @@ namespace KudoEngine.Engine.Extenders
         /// </summary>
         /// <param name="tag">A Name to differentiate between Colliders</param>
         /// <param name="offset">Size of collider relative to Subject</param>
-        public BoxCollider2D(Sprite2D sprite, string tag = "", float offset = 0f)
+        public BoxCollider2D(Sprite2D sprite, string tag = "", Vector2 scaleModifier = null, Vector2 positionModifier = null)
         {
             Subject = sprite;
             Tag = tag;
-            Offset = offset;
+            ScaleModifier = scaleModifier ?? new();
+            PositionModifier = positionModifier ?? new();
 
             Kudo.AddBoxCollider2D(this);
         }
@@ -62,10 +68,10 @@ namespace KudoEngine.Engine.Extenders
             {
                 if (tags.Any(collider.Tag.Contains))
                 {
-                    if (Subject.Position.X - Offset < collider.Subject.Position.X + collider.Subject.Scale.X + collider.Offset &&
-                        Subject.Position.X + Subject.Scale.X + Offset > collider.Subject.Position.X - collider.Offset &&
-                        Subject.Position.Y - Offset < collider.Subject.Position.Y + collider.Subject.Scale.Y + collider.Offset &&
-                        Subject.Position.Y + Subject.Scale.Y + Offset > collider.Subject.Position.Y - collider.Offset)
+                    if (GetModifiedPosition(this).X - ScaleModifier.X < GetModifiedPosition(collider).X + collider.Subject.Scale.X + collider.ScaleModifier.X &&
+                        GetModifiedPosition(this).X + Subject.Scale.X + ScaleModifier.X > GetModifiedPosition(collider).X - collider.ScaleModifier.X &&
+                        GetModifiedPosition(this).Y - ScaleModifier.Y < GetModifiedPosition(collider).Y + collider.Subject.Scale.Y + collider.ScaleModifier.Y &&
+                        GetModifiedPosition(this).Y + Subject.Scale.Y + ScaleModifier.Y > GetModifiedPosition(collider).Y - collider.ScaleModifier.Y)
                     {
                         return true;
                     }
@@ -73,6 +79,14 @@ namespace KudoEngine.Engine.Extenders
             }
 
             return false;
+        }
+
+        private Vector2 GetModifiedPosition(BoxCollider2D collider)
+        {
+            Vector2 ModifiedPosition = new();
+            ModifiedPosition.X = collider.Subject.Position.X + collider.PositionModifier.X;
+            ModifiedPosition.Y = collider.Subject.Position.Y + collider.PositionModifier.Y;
+            return ModifiedPosition;
         }
     }
 }

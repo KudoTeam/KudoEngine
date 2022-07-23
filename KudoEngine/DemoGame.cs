@@ -20,16 +20,17 @@ namespace KudoEngine
         bool up;
         bool down;
 
-        Vector2 gridSize = new(10, 8);
+        Vector2 gridSize = new(16, 9);
 
         public float DefaultMovementSpeed = 8f;
 
         string[,] Map = new string[10,60];
 
-        public DemoGame() : base(new Vector2(615, 515),"Kudo Test Demo") { }
+        public DemoGame() : base(new Vector2(1080, 607),"Kudo Test Demo") { }
 
         Sprite2D player;
         BoxCollider2D playerCollider;
+        BoxCollider2D playerGroundCollider;
         Physics2D playerPhysics;
         Sprite2D eoc;
         BoxCollider2D eocCollider;
@@ -37,10 +38,18 @@ namespace KudoEngine
         public Vector2 lastPos;
 
         Camera cam1;
-        Camera cam2;
 
         int eocVelocity = -1;
         int eocSpeed = 1;
+
+        public bool isGrounded(BoxCollider2D playerGroundCollider)
+        {
+            if (playerGroundCollider.IsColliding(new(new string[] {"tiles"})))
+            {
+                return true;
+            }
+            return false;
+        }
 
         public void MapGen()
         {
@@ -112,20 +121,19 @@ namespace KudoEngine
             Skybox = Color.Aqua;
 
             cam1 = new(new());
-            cam2 = new(new(100, 100));
 
             ActiveCamera = cam1;
-
-            lastPos = new();
 
             MapGen();
             MapRender();
 
-            eoc = new(new(550, 100), new(400, 200), "eoc", "Boss");
-            eocCollider = new(eoc, "bosses", -30f);
+            eoc = new(new(550, 200), new(400, 200), "eoc", "Boss");
+            eocCollider = new(eoc, "bosses", new(-30f,-30f));
             player = new(new(150, 150), new(50, 100), "guide", "Player");
-            playerCollider = new(player, "player", -5f);
+            playerCollider = new(player, "player", new(-5f,0));
             playerPhysics = new Physics2D(playerCollider, new(new string[] {"tiles"}));
+            playerPhysics.Weight = 10f;
+            playerGroundCollider = new(player, "Ground Check", new(5f, 0f), new(0f, 1f));
 
             // This is duplicate code, but I want bushed to render before the player
             // TODO: Add rendering layers
@@ -143,27 +151,11 @@ namespace KudoEngine
 
         public override void Draw()
         {
-            
-        }
-
-        public void stopMovementOnCollision() {
-            if (playerCollider.IsColliding(new(new string[] {"tiles"})))
-            {
-                player.Position.X = lastPos.X;
-                player.Position.Y = lastPos.Y;
-            }
-            else
-            {
-                lastPos.X = player.Position.X;
-                lastPos.Y = player.Position.Y;
-            }
-        }
-
-        int timer = 0;
-        public override void Update()
-        {
             playerPhysics.Update();
+        }
 
+        public override void Update()
+        {      
             float MovementSpeed = DefaultMovementSpeed;
 
             if (playerCollider.IsColliding(new(new string[] { "bushes" })))
@@ -171,9 +163,10 @@ namespace KudoEngine
                 MovementSpeed /= 5f;
             }
 
-            if (up)
+            if (up && isGrounded(playerGroundCollider))
             {
-                playerPhysics.Velocity.Y = -MovementSpeed;
+
+                playerPhysics.Velocity.Y = -MovementSpeed*2;
             }
             if (down)
             {
@@ -181,11 +174,11 @@ namespace KudoEngine
             }
             if (left)
             {
-                player.Position.X -= MovementSpeed;
+                playerPhysics.Velocity.X = -MovementSpeed;
             }
             if (right)
             {
-                player.Position.X += MovementSpeed;
+                playerPhysics.Velocity.X = MovementSpeed;
             }
 
             cam1.Position.X = player.Position.X - ScreenSize.X / 2 + player.Scale.X / 2;

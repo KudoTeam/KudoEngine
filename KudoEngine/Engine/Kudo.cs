@@ -156,12 +156,12 @@ namespace KudoEngine.Engine
             // Adjust Camera Zoom
             g.ScaleTransform(ActiveCamera.Zoom, ActiveCamera.Zoom);
             // Draw shapes
-            foreach (Shape2D shape in Shapes2D)
+            foreach (Shape2D shape in Shapes2D.ToList())
             {
                 g.FillRectangle(new SolidBrush(shape.Color), shape.Position.X, shape.Position.Y, shape.Scale.X, shape.Scale.Y);
             }
             // Draw sprites
-            foreach (Sprite2D sprite in Sprites2D)
+            foreach (Sprite2D sprite in Sprites2D.ToList())
             {
                 g.DrawImage(sprite.Sprite, sprite.Position.X, sprite.Position.Y, sprite.Scale.X, sprite.Scale.Y);
             }

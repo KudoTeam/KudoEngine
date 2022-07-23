@@ -20,9 +20,18 @@ namespace KudoEngine.Engine.Extenders
         public List<string> Tags { get; private set; }
 
         public Vector2 Velocity = new();
-        public Vector2 MaxVelocity = new(10f, 10f);
+        /// <summary>
+        /// Terminal Velocity (ignored when setting Velocity manually)
+        /// </summary>
+        public Vector2 MaxVelocity = new(15f, 15f);
+        /// <summary>
+        /// Vertical falling velocity increase
+        /// </summary>
         public float Gravity = 0.5f;
-        public float Weight = 5f;
+        /// <summary>
+        /// Horizontal velocity decrease
+        /// </summary>
+        public float Weight = 0.5f;
 
         private Vector2 LastPosition = new();
 
@@ -50,10 +59,19 @@ namespace KudoEngine.Engine.Extenders
             Collider.Subject.Position.X += Velocity.X;
             StopHorizontalOnCollision();
             Collider.Subject.Position.Y += Velocity.Y;
-            breakFallOnCollision();
+            BreakFallOnCollision();
+            // Wear Out Horizontal Velocity
+            if (Velocity.X > 0)
+            {
+                Velocity.X = Math.Max(Velocity.X - Weight, 0);
+            } else
+            if (Velocity.X < 0)
+            {
+                Velocity.X = Math.Min(Velocity.X + Weight, 0);
+            }
         }
 
-        private void breakFallOnCollision()
+        private void BreakFallOnCollision()
         {
             if (Collider.IsColliding(Tags))
             {
