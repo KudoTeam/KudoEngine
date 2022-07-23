@@ -43,11 +43,15 @@ namespace KudoEngine.Engine
             Window = new Canvas();
             Window.Size = new Size((int)ScreenSize.X, (int)ScreenSize.Y);
             Window.Text = Title;
+            // Make Window Unresizable
+            Window.FormBorderStyle = FormBorderStyle.FixedToolWindow;
             // Render Screen
             Window.Paint += Renderer;
             // Check Key Events
             Window.KeyDown += KeyDown;
             Window.KeyUp += KeyUp;
+            // On Close Events
+            Window.FormClosing += Quit;
 
             // Make a thread to refresh window asynchronously
             GameLoopThread = new Thread(GameLoop/*here*/);
@@ -57,6 +61,13 @@ namespace KudoEngine.Engine
             Application.Run(Window);
         }
 
+        // Abort thread when quitting to avoid memory leaks
+        private void Quit(object? sender, FormClosingEventArgs e)
+        {
+            GameLoopThread.Abort();
+        }
+
+        #region HardwareInteractions
         private void KeyDown(object? sender, KeyEventArgs e)
         {
             KeyDown(e);
@@ -66,6 +77,7 @@ namespace KudoEngine.Engine
         {
             KeyUp(e);
         }
+        #endregion
 
         void GameLoop()
         {
@@ -87,8 +99,8 @@ namespace KudoEngine.Engine
             }
         }
 
-        #region Shape2D
-        private static List<Shape2D> Shapes2D = new();
+        #region Shapes2D
+        public static List<Shape2D> Shapes2D { get; private set; } = new();
 
         public static void AddShape2D(Shape2D shape)
         {
@@ -101,8 +113,8 @@ namespace KudoEngine.Engine
         }
         #endregion
 
-        #region Sprite2D
-        private static List<Sprite2D> Sprites2D = new();
+        #region Sprites2D
+        public static List<Sprite2D> Sprites2D { get; private set; } = new();
 
         public static void AddSprite2D(Sprite2D sprite)
         {
@@ -112,6 +124,20 @@ namespace KudoEngine.Engine
         public static void RemoveSprite2D(Sprite2D sprite)
         {
             Sprites2D.Remove(sprite);
+        }
+        #endregion
+
+        #region BoxColliders2D
+        public static List<BoxCollider2D> BoxColliders2D { get; private set; } = new();
+
+        public static void AddBoxCollider2D(BoxCollider2D collider)
+        {
+            BoxColliders2D.Add(collider);
+        }
+
+        public static void RemoveBoxCollider2D(BoxCollider2D collider)
+        {
+            BoxColliders2D.Remove(collider);
         }
         #endregion
 

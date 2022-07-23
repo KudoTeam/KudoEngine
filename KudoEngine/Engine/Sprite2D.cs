@@ -12,18 +12,18 @@ namespace KudoEngine.Engine
         public Vector2 Position;
         public Vector2 Scale;
         public string Directory;
-        public string Name;
+        public string Tag;
 
         public Bitmap Sprite;
 
         public bool isAlive { get; private set; }
 
-        public Sprite2D(Vector2 position, Vector2 scale, string directory, string name = "Sprite2D")
+        public Sprite2D(Vector2 position, Vector2 scale, string directory, string tag = "Sprite2D")
         {
             Position = position;
             Scale = scale;
             Directory = directory;
-            Name = name;
+            Tag = tag;
 
             Image tmp = Image.FromFile($"Assets/Sprites/{Directory}.png");
             Sprite = new(tmp, (int)Scale.X, (int)Scale.Y);

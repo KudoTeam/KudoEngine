@@ -14,7 +14,7 @@ namespace KudoEngine.Engine
         public float Rotation;
         public float Zoom;
 
-        public Camera(Vector2 position, float rotation = 1f, float zoom = 1f)
+        public Camera(Vector2 position, float rotation = 0f, float zoom = 1f)
         {
             Position = position;
             Rotation = rotation;

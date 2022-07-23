@@ -12,16 +12,16 @@ namespace KudoEngine.Engine
         public Vector2 Position;
         public Vector2 Scale;
         public Color Color;
-        public string Name;
+        public string Tag;
 
         public bool isAlive { get; private set; }
 
-        public Shape2D(Vector2 position, Vector2 scale, Color color, string name = "Shape2D")
+        public Shape2D(Vector2 position, Vector2 scale, Color color, string tag = "Shape2D")
         {
             Position = position;
             Scale = scale;
             Color = color;
-            Name = name;
+            Tag = tag;
 
             isAlive = true;
 
