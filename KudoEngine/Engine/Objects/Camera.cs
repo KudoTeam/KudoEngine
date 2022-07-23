@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KudoEngine.Engine
+namespace KudoEngine.Engine.Objects
 {
     public class Camera
     {

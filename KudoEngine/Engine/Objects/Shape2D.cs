@@ -3,34 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Drawing;
 
-namespace KudoEngine.Engine
+namespace KudoEngine.Engine.Objects
 {
-    public class Sprite2D
+    // TODO: Add other shapes
+    public class Shape2D
     {
         public Vector2 Position;
         public Vector2 Scale;
-        public string Directory;
+        public Color Color;
         public string Tag;
-
-        public Bitmap Sprite;
 
         public bool isAlive { get; private set; }
 
-        public Sprite2D(Vector2 position, Vector2 scale, string directory, string tag = "Sprite2D")
+        public Shape2D(Vector2 position, Vector2 scale, Color color, string tag = "Shape2D")
         {
             Position = position;
             Scale = scale;
-            Directory = directory;
+            Color = color;
             Tag = tag;
-
-            Image tmp = Image.FromFile($"Assets/Sprites/{Directory}.png");
-            Sprite = new(tmp, (int)Scale.X, (int)Scale.Y);
 
             isAlive = true;
 
-            Kudo.AddSprite2D(this);
+            Kudo.AddShape2D(this);
         }
 
         public void Kill()
@@ -39,12 +34,12 @@ namespace KudoEngine.Engine
             {
                 isAlive = false;
 
-                Kudo.RemoveSprite2D(this);
+                Kudo.RemoveShape2D(this);
                 // TODO: Remove class instance from memory
             }
             else
             {
-                Log.error("This sprite does not exist");
+                Log.error("This shape does not exist");
             }
         }
     }

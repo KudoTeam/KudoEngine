@@ -1,10 +1,11 @@
-﻿using System;
+﻿using KudoEngine.Engine.Objects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KudoEngine.Engine
+namespace KudoEngine.Engine.Extenders
 {
     public class BoxCollider2D
     {
@@ -37,7 +38,7 @@ namespace KudoEngine.Engine
         /// </summary>
         public bool IsColliding(string tag)
         {
-            foreach(BoxCollider2D collider in Kudo.BoxColliders2D)
+            foreach (BoxCollider2D collider in Kudo.BoxColliders2D)
             {
                 if (collider.Tag == tag)
                 {

@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using KudoEngine.Engine;
 using System.Drawing;
+using KudoEngine.Engine.Objects;
+using KudoEngine.Engine.Extenders;
 
 // This file's code is effortless and is
 // just for testing purposes
@@ -18,31 +20,11 @@ namespace KudoEngine
         bool up;
         bool down;
 
-        Vector2 gridSize = new(9, 7);
+        Vector2 gridSize = new(10, 8);
 
-        public float DefaultMovementSpeed = 3f;
+        public float DefaultMovementSpeed = 8f;
 
-        string[,] Map =
-        {
-            {".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".","."},
-            {".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".","."},
-            {".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".","."},
-            {".",".",".",".",".",".",".",".",".",".",".",".",".",".","g",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".","."},
-            {".",".",".",".","g","g","g","g","g",".",".",".",".",".","g",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".","."},
-            {".",".",".",".",".","g","g","g",".",".",".",".","g","g","g","g","g",".",".",".",".",".",".",".",".",".",".",".",".",".","."},
-            {".",".",".",".",".",".","g",".",".",".",".",".",".",".","g",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".","."},
-            {".",".",".",".",".",".",".",".",".",".",".",".",".",".","g",".",".",".",".",".",".",".",".",".",".",".",".",".",".",".","."},
-            {".",".",".",".",".",".",".","g",".",".",".",".",".",".",".",".",".","g",".",".",".",".",".",".",".",".","b",".",".",".","."},
-            {".",".",".",".",".",".","g","g","g",".",".",".",".",".",".",".","g","g","g",".",".",".","g",".",".","g","g","g","g",".","."},
-            {".",".",".",".",".",".",".","p",".",".",".",".",".",".",".",".",".","p",".",".",".","g","g","g",".","g",".",".","g",".","."},
-            {".",".",".","b",".",".",".","p",".","b",".",".","p","p","p",".",".","p",".",".",".",".","p",".",".","g",".",".","g",".","."},
-            {".","b","g","g","g",".",".","g","g","g","g","g","g","g","g","g","g","g","g","g",".",".","p",".",".","g",".",".","g",".","."},
-            {"g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g"},
-            {"g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g"},
-            {"g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g"},
-            {"g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g","g"},
-
-        };
+        string[,] Map = new string[10,60];
 
         public DemoGame() : base(new Vector2(615, 515),"Kudo Test Demo") { }
 
@@ -59,6 +41,71 @@ namespace KudoEngine
         int eocVelocity = -1;
         int eocSpeed = 1;
 
+        public void MapGen()
+        {
+            Random rnd = new Random();
+            int height = rnd.Next(2, 6);
+            int lastTree = 0;
+            for (int i = 0; i < Map.GetLength(1); i++)
+            {
+                for (int j = 0; j <= height; j++)
+                {
+                    if (Map.GetLength(0) >= Map.GetLength(0) - 1 - j)
+                    {
+                        Map[Map.GetLength(0) - 1 - j, i] = "g";
+                    }
+                }
+                if (rnd.Next(0,9) == 0 && Map.GetLength(0) - 2 - height >= 0)
+                {
+                    Map[Map.GetLength(0)-2-height, i] = "b";
+                }
+                if (rnd.Next(0,4) == 0
+                    && lastTree - i < -3
+                    && Map.GetLength(0) - 5 - height >= 0
+                    && Map.GetLength(1) - 1 > i + 1
+                    && 0 <= i - 1)
+                {
+                    Map[Map.GetLength(0) - 2 - height, i] = "p";
+                    Map[Map.GetLength(0) - 3 - height, i] = "p";
+                    Map[Map.GetLength(0) - 4 - height, i + 1] = "g";
+                    Map[Map.GetLength(0) - 4 - height, i - 1] = "g";
+                    Map[Map.GetLength(0) - 4 - height, i] = "g";
+                    Map[Map.GetLength(0) - 5 - height, i] = "g";
+
+                    lastTree = i;
+                }
+                if (height > 0)
+                {
+                    if (rnd.Next(0,2) == 0)
+                    {
+                        height += rnd.Next(-1, 2);
+                    }
+                } else
+                {
+                    height++;
+                }
+                
+            }
+        }
+
+        public void MapRender()
+        {
+            for (int i = 0; i < Map.GetLength(1); i++)
+            {
+                for (int j = 0; j < Map.GetLength(0); j++)
+                {
+                    if (Map[j, i] == "g")
+                    {
+                        new BoxCollider2D(new Shape2D(new(i * ScreenSize.X / gridSize.X, j * ScreenSize.Y / gridSize.Y), new(ScreenSize.X / gridSize.X, ScreenSize.Y / gridSize.Y), Color.DarkGreen, "Ground"), "tiles");
+                    }
+                    else if (Map[j, i] == "p")
+                    {
+                        new BoxCollider2D(new Sprite2D(new(i * ScreenSize.X / gridSize.X, j * ScreenSize.Y / gridSize.Y), new(ScreenSize.X / gridSize.X, ScreenSize.Y / gridSize.Y), "plank", "Wood"), "tiles");
+                    }
+                }
+            }
+        } 
+
         public override void Load()
         {
             Skybox = Color.Aqua;
@@ -70,20 +117,8 @@ namespace KudoEngine
 
             lastPos = new();
 
-            for(int i = 0; i < Map.GetLength(1); i++)
-            {
-                for(int j = 0; j < Map.GetLength(0); j++)
-                {
-                    if (Map[j, i] == "g")
-                    {
-                        new BoxCollider2D(new Shape2D(new(i * ScreenSize.X / gridSize.X, j * ScreenSize.Y / gridSize.Y), new(ScreenSize.X / gridSize.X, ScreenSize.Y / gridSize.Y), Color.DarkGreen, "Ground"), "tiles");
-                    }
-                    else if (Map[j, i] == "p")
-                    {
-                        new BoxCollider2D(new Sprite2D(new(i * ScreenSize.X / gridSize.X, j * ScreenSize.Y / gridSize.Y), new(ScreenSize.X / gridSize.X, ScreenSize.Y / gridSize.Y), "plank", "Wood"),"tiles");
-                    }
-                }
-            }
+            MapGen();
+            MapRender();
 
             eoc = new(new(550, 100), new(400, 200), "eoc", "Boss");
             eocCollider = new(eoc, "bosses", -30f);
@@ -132,7 +167,7 @@ namespace KudoEngine
                 MovementSpeed /= 5f;
             }
 
-                if (up)
+            if (up)
             {
                 player.Position.Y -= MovementSpeed;
                 stopMovementOnCollision();
