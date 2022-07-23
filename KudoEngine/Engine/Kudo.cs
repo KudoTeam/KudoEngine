@@ -146,15 +146,22 @@ namespace KudoEngine.Engine
         // It draws stuff
         private void Renderer(object? sender, PaintEventArgs e)
         {
+            // Camera origin points (to get center)
+            Vector2 Move = ActiveCamera.Position;
+
             Graphics g = e.Graphics;
             // Clear screen
             g.Clear(Skybox);
             // Adjust Camera Position
-            g.TranslateTransform(-ActiveCamera.Position.X, -ActiveCamera.Position.Y);
+            g.TranslateTransform(-ActiveCamera.Position.X + ScreenSize.X / 2f, -ActiveCamera.Position.Y + ScreenSize.Y / 2f);
             // Adjust Camera Rotation
+            g.TranslateTransform(Move.X, Move.Y);
             g.RotateTransform(ActiveCamera.Rotation);
+            g.TranslateTransform(-Move.X, -Move.Y);
             // Adjust Camera Zoom
+            g.TranslateTransform(Move.X, Move.Y);
             g.ScaleTransform(ActiveCamera.Zoom, ActiveCamera.Zoom);
+            g.TranslateTransform(-Move.X, -Move.Y);
             // Draw shapes
             foreach (Shape2D shape in Shapes2D.ToList())
             {
@@ -165,6 +172,8 @@ namespace KudoEngine.Engine
             {
                 g.DrawImage(sprite.Sprite, sprite.Position.X, sprite.Position.Y, sprite.Scale.X, sprite.Scale.Y);
             }
+            // Reset Transform
+            g.ResetTransform();
         }
 
         /// <summary>

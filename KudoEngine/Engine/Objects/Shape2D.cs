@@ -17,7 +17,7 @@ namespace KudoEngine.Engine.Objects
         public Vector2 Scale;
         public Color Color;
         /// <summary>
-        /// A Name for cosmetic purposes
+        /// A cosmetic tag for debugging
         /// </summary>
         public string Tag;
 
@@ -26,7 +26,7 @@ namespace KudoEngine.Engine.Objects
         /// <summary>
         /// Initialize a new Shape2D
         /// </summary>
-        /// <param name="tag">A Name for cosmetic purposes</param>
+        /// <param name="tag">A cosmetic tag for debugging</param>
         public Shape2D(Vector2 position, Vector2 scale, Color color, string tag = "Shape2D")
         {
             Position = position;
@@ -37,6 +37,14 @@ namespace KudoEngine.Engine.Objects
             isAlive = true;
 
             Kudo.AddShape2D(this);
+        }
+
+        /// <summary>
+        /// Get center position of Shape2D instance
+        /// </summary>
+        public Vector2 Center()
+        {
+            return new(Position.X + Scale.X / 2, Position.Y + Scale.Y / 2);
         }
 
         /// <summary>

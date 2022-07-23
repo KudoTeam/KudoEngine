@@ -15,13 +15,15 @@ namespace KudoEngine.Engine.Extenders
     {
         public BoxCollider2D Collider { get; private set; }
         /// <summary>
-        /// Hitbox Tags this instance interacts with
+        /// Hitbox colliders this instance interacts with
         /// </summary>
         public List<string> Tags { get; private set; }
-
+        /// <summary>
+        /// Current velocity
+        /// </summary>
         public Vector2 Velocity = new();
         /// <summary>
-        /// Terminal Velocity (ignored when setting Velocity manually)
+        /// Terminal velocity (ignored when setting Velocity manually)
         /// </summary>
         public Vector2 MaxVelocity = new(15f, 15f);
         /// <summary>

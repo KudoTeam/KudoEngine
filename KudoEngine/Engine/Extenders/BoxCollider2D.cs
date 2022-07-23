@@ -15,15 +15,15 @@ namespace KudoEngine.Engine.Extenders
     {
         public dynamic Subject { get; private set; }
         /// <summary>
-        /// A Name to differentiate between Colliders
+        /// A tag to differentiate between colliders
         /// </summary>
         public string Tag = "";
         /// <summary>
-        /// Size of collider relative to Subject
+        /// Size of collider relative to subject
         /// </summary>
         public Vector2 ScaleModifier = new();
         /// <summary>
-        /// Position of collider relative to Subject
+        /// Position of collider relative to subject
         /// </summary>
         public Vector2 PositionModifier = new();
 

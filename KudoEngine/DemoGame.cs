@@ -130,7 +130,7 @@ namespace KudoEngine
             eoc = new(new(550, 200), new(400, 200), "eoc", "Boss");
             eocCollider = new(eoc, "bosses", new(-30f,-30f));
             player = new(new(150, 150), new(50, 100), "guide", "Player");
-            playerCollider = new(player, "player", new(-5f,0));
+            playerCollider = new(player, "player", new(-8.5f,0));
             playerPhysics = new Physics2D(playerCollider, new(new string[] {"tiles"}));
             playerPhysics.Weight = 10f;
             playerGroundCollider = new(player, "Ground Check", new(5f, 0f), new(0f, 1f));
@@ -158,6 +158,8 @@ namespace KudoEngine
         {      
             float MovementSpeed = DefaultMovementSpeed;
 
+            cam1.Position = player.Center();
+
             if (playerCollider.IsColliding(new(new string[] { "bushes" })))
             {
                 MovementSpeed /= 5f;
@@ -180,9 +182,6 @@ namespace KudoEngine
             {
                 playerPhysics.Velocity.X = MovementSpeed;
             }
-
-            cam1.Position.X = player.Position.X - ScreenSize.X / 2 + player.Scale.X / 2;
-            cam1.Position.Y = player.Position.Y - ScreenSize.Y / 2 + player.Scale.Y / 2;
 
             if (eoc.Position.X <= 300)
             {
@@ -214,6 +213,22 @@ namespace KudoEngine
             if (e.KeyCode == Keys.Right)
             {
                 right = true;
+            }
+            if (e.KeyCode == Keys.V)
+            {
+                ActiveCamera.Rotation += 1;
+            }
+            if (e.KeyCode == Keys.C)
+            {
+                ActiveCamera.Rotation -= 1;
+            }
+            if (e.KeyCode == Keys.G)
+            {
+                ActiveCamera.Zoom += 0.01f;
+            }
+            if (e.KeyCode == Keys.F)
+            {
+                ActiveCamera.Zoom -= 0.01f;
             }
         }
 

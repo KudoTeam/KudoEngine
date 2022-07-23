@@ -17,7 +17,7 @@ namespace KudoEngine.Engine.Objects
         public Vector2 Scale;
         public string Directory;
         /// <summary>
-        /// A Name for cosmetic purposes
+        /// A cosmetic tag for debugging
         /// </summary>
         public string Tag;
 
@@ -28,8 +28,8 @@ namespace KudoEngine.Engine.Objects
         /// <summary>
         /// Initialize a new Sprite2D
         /// </summary>
-        /// <param name="directory">A .png file (name only)</param>
-        /// <param name="tag">A Name for cosmetic purposes</param>
+        /// <param name="directory">A .png file for the texture (name only)</param>
+        /// <param name="tag">A cosmetic tag for debugging</param>
         public Sprite2D(Vector2 position, Vector2 scale, string directory, string tag = "Sprite2D")
         {
             Position = position;
@@ -43,6 +43,14 @@ namespace KudoEngine.Engine.Objects
             isAlive = true;
 
             Kudo.AddSprite2D(this);
+        }
+
+        /// <summary>
+        /// Get center position of Sprite2D instance
+        /// </summary>
+        public Vector2 Center()
+        {
+            return new(Position.X + Scale.X / 2, Position.Y + Scale.Y / 2);
         }
 
         /// <summary>

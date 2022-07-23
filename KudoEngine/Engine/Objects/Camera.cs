@@ -12,8 +12,6 @@ namespace KudoEngine.Engine.Objects
     /// </summary>
     public class Camera
     {
-        // TODO: Sync camera position with zoom
-        // TODO: Zoom and rotate around center
         public Vector2 Position = new();
         public float Rotation;
         public float Zoom;
