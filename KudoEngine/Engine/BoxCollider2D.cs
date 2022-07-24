@@ -16,15 +16,15 @@ namespace KudoEngine.Engine
         /// <summary>
         /// A tag to differentiate between colliders
         /// </summary>
-        public string Tag = "";
+        public string Tag;
         /// <summary>
         /// Size of collider relative to subject
         /// </summary>
-        public Vector2 ScaleModifier = new();
+        public Vector2 ScaleModifier;
         /// <summary>
         /// Position of collider relative to subject
         /// </summary>
-        public Vector2 PositionModifier = new();
+        public Vector2 PositionModifier;
 
         /// <summary>
         /// Initialize a new BoxCollider2D for a Shape2D
@@ -36,6 +36,7 @@ namespace KudoEngine.Engine
             Subject = shape;
             Tag = tag;
             ScaleModifier = scaleModifier ?? new();
+            // TODO: Fix PositionModifier
             PositionModifier = positionModifier ?? new();
 
             Kudo.AddBoxCollider2D(this);
@@ -80,6 +81,7 @@ namespace KudoEngine.Engine
             return false;
         }
 
+        // TODO: Fix tags
         /// <summary>
         /// Get all BoxColliders2D this collider is colliding with
         /// </summary>

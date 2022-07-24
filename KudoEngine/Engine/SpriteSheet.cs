@@ -39,7 +39,7 @@ namespace KudoEngine.Engine
         /// <summary>
         /// Get a sprite by name
         /// </summary>
-        public Bitmap? GetSprite(string name)
+        public Bitmap GetSprite(string name)
         {
             try
             {
@@ -52,7 +52,9 @@ namespace KudoEngine.Engine
             } catch
             {
                 Log.error("Invalid sprite");
+                #pragma warning disable CS8603
                 return null;
+                #pragma warning restore CS8603
             }
         }
     }

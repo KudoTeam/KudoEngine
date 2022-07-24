@@ -12,7 +12,7 @@ namespace KudoEngine.Engine
     /// </summary>
     public class Camera
     {
-        public Vector2 Position = new();
+        public Vector2 Position;
         public float Rotation;
         public float Zoom;
 

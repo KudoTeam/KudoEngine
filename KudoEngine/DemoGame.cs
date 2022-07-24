@@ -39,7 +39,11 @@ namespace KudoEngine
 
         Camera cam1;
 
+        List<Sprite2D> coins = new();
+
         SpriteSheet s = new("2T");
+        SpriteSheet ad = new("ad");
+
 
         int eocVelocity = -1;
         int eocSpeed = 1;
@@ -136,13 +140,19 @@ namespace KudoEngine
 
             s.AddSprite("coin", new(new(225, 385), new(35, 30)));
 
+            ad.AddSprite("idle", new(new(5, 11), new(18, 20)));
+            for(int i = 0;i<8;i++)
+            {
+                ad.AddSprite("walk"+i, new(new(5+32*i, 41), new(18, 20)));
+            }
+
             MapGen();
             MapRender();
 
             eoc = new(new(550, 200), new(400, 200), "eoc", "Boss");
             eocCollider = new(eoc, "bosses", new(-30f,-30f));
-            player = new(new(150, 150), new(50, 100), "guide", "Player");
-            playerCollider = new(player, "player", new(-8.5f,0));
+            player = new(new(150, 150), new(70, 100), ad.GetSprite("idle"), "Player");
+            playerCollider = new(player, "player", new(-21.5f,-3f));
             playerPhysics = new Physics2D(playerCollider, new(new string[] {"tiles"}));
             playerPhysics.Weight = 10f;
             playerGroundCollider = new(player, "Ground Check", new(5f, 0f), new(0f, 1f));
@@ -168,6 +178,8 @@ namespace KudoEngine
             playerPhysics.Update();
         }
 
+        int animation = 0;
+
         public override void Update()
         {      
             float MovementSpeed = DefaultMovementSpeed;
@@ -181,7 +193,6 @@ namespace KudoEngine
 
             if (up && isGrounded(playerGroundCollider))
             {
-
                 playerPhysics.Velocity.Y = -MovementSpeed*2;
             }
             if (down)
@@ -190,10 +201,29 @@ namespace KudoEngine
             }
             if (left)
             {
+                // TODO: Implement this as an Extender
+                if (Timer % 5 == 0)
+                {
+                    animation++;
+                    if (animation > 7)
+                    {
+                        animation = 0;
+                    }
+                    player.Sprite = ad.GetSprite("walk" + animation);
+                }
                 playerPhysics.Velocity.X = -MovementSpeed;
             }
             if (right)
             {
+                if (Timer % 5 == 0)
+                {
+                    animation++;
+                    if (animation > 7)
+                    {
+                        animation = 0;
+                    }
+                    player.Sprite = ad.GetSprite("walk" + animation);
+                }
                 playerPhysics.Velocity.X = MovementSpeed;
             }
 
@@ -206,7 +236,7 @@ namespace KudoEngine
             }
 
             var a = playerCollider.GetCollisions();
-            foreach(var o in a)
+            foreach (var o in a)
             {
                 if (o.Tag == "collectible" && o.Subject.IsAlive)
                 {
@@ -273,10 +303,14 @@ namespace KudoEngine
             }
             if (e.KeyCode == Keys.Left)
             {
+                animation = 0;
+                player.Sprite = ad.GetSprite("idle");
                 left = false;
             }
             if (e.KeyCode == Keys.Right)
             {
+                animation = 0;
+                player.Sprite = ad.GetSprite("idle");
                 right = false;
             }
             if (e.KeyCode == Keys.LControlKey)

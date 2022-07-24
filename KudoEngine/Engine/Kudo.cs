@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
+using System.Drawing.Drawing2D;
 
 namespace KudoEngine.Engine
 {
@@ -33,6 +34,10 @@ namespace KudoEngine.Engine
         /// Current Camera
         /// </summary>
         public Camera ActiveCamera = new(new(),1);
+        /// <summary>
+        /// Increments after each frame
+        /// </summary>
+        public int Timer = 0;
 
         public Kudo(Vector2 screenSize, string title)
         {
@@ -89,6 +94,7 @@ namespace KudoEngine.Engine
                     Draw();
                     Window.BeginInvoke((MethodInvoker)delegate { Window.Refresh(); });
                     Update();
+                    Timer++;
                     Thread.Sleep(1);
                 }
                 catch
@@ -148,6 +154,8 @@ namespace KudoEngine.Engine
             Vector2 Move = ActiveCamera.Position;
 
             Graphics g = e.Graphics;
+            // Unblur small resolution sprites
+            g.InterpolationMode = InterpolationMode.NearestNeighbor;
             // Clear screen
             g.Clear(Skybox);
             #region Camera
