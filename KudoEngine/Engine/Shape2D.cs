@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KudoEngine.Engine.Objects
+namespace KudoEngine.Engine
 {
     // TODO: Add other shapes
     /// <summary>
@@ -21,7 +21,7 @@ namespace KudoEngine.Engine.Objects
         /// </summary>
         public string Tag;
 
-        public bool isAlive { get; private set; }
+        public bool IsAlive { get; private set; }
 
         /// <summary>
         /// Initialize a new Shape2D
@@ -34,7 +34,7 @@ namespace KudoEngine.Engine.Objects
             Color = color;
             Tag = tag;
 
-            isAlive = true;
+            IsAlive = true;
 
             Kudo.AddShape2D(this);
         }
@@ -52,9 +52,9 @@ namespace KudoEngine.Engine.Objects
         /// </summary>
         public void Kill()
         {
-            if (isAlive)
+            if (IsAlive)
             {
-                isAlive = false;
+                IsAlive = false;
 
                 Kudo.RemoveShape2D(this);
                 // TODO: Remove class instance from memory

@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
-using KudoEngine.Engine.Objects;
-using KudoEngine.Engine.Extenders;
 
 namespace KudoEngine.Engine
 {
@@ -22,9 +20,9 @@ namespace KudoEngine.Engine
     public abstract class Kudo
     {
         public Vector2 ScreenSize { get; private set; } = new(512,512);
-        private string Title = "Kudo Game";
+        private readonly string Title = "Kudo Game";
         private Canvas Window;
-        private Thread GameLoopThread;
+        private readonly Thread GameLoopThread;
 
         // Accessible by the user
         /// <summary>
@@ -152,6 +150,7 @@ namespace KudoEngine.Engine
             Graphics g = e.Graphics;
             // Clear screen
             g.Clear(Skybox);
+            #region Camera
             // Adjust Camera Position
             g.TranslateTransform(-ActiveCamera.Position.X + ScreenSize.X / 2f, -ActiveCamera.Position.Y + ScreenSize.Y / 2f);
             // Adjust Camera Rotation
@@ -162,16 +161,19 @@ namespace KudoEngine.Engine
             g.TranslateTransform(Move.X, Move.Y);
             g.ScaleTransform(ActiveCamera.Zoom, ActiveCamera.Zoom);
             g.TranslateTransform(-Move.X, -Move.Y);
-            // Draw shapes
+            #endregion
+            #region Drawing
+            // Draw Shapes2D
             foreach (Shape2D shape in Shapes2D.ToList())
             {
                 g.FillRectangle(new SolidBrush(shape.Color), shape.Position.X, shape.Position.Y, shape.Scale.X, shape.Scale.Y);
             }
-            // Draw sprites
+            // Draw Sprites2D
             foreach (Sprite2D sprite in Sprites2D.ToList())
             {
                 g.DrawImage(sprite.Sprite, sprite.Position.X, sprite.Position.Y, sprite.Scale.X, sprite.Scale.Y);
             }
+            #endregion
             // Reset Transform
             g.ResetTransform();
         }

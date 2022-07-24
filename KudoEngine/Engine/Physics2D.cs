@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using KudoEngine.Engine.Objects;
 
-namespace KudoEngine.Engine.Extenders
+namespace KudoEngine.Engine
 {
     /// <summary>
     /// <see langword="Extender"/>
@@ -66,7 +65,8 @@ namespace KudoEngine.Engine.Extenders
             if (Velocity.X > 0)
             {
                 Velocity.X = Math.Max(Velocity.X - Weight, 0);
-            } else
+            }
+            else
             if (Velocity.X < 0)
             {
                 Velocity.X = Math.Min(Velocity.X + Weight, 0);

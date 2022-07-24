@@ -5,8 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using KudoEngine.Engine;
-using KudoEngine.Engine.Objects;
-using KudoEngine.Engine.Extenders;
 
 // This file's code is effortless and is
 // just for testing purposes
@@ -35,9 +33,13 @@ namespace KudoEngine
         Sprite2D eoc;
         BoxCollider2D eocCollider;
 
+        float playerScaleY;
+
         public Vector2 lastPos;
 
         Camera cam1;
+
+        SpriteSheet s = new("2T");
 
         int eocVelocity = -1;
         int eocSpeed = 1;
@@ -68,6 +70,10 @@ namespace KudoEngine
                 if (rnd.Next(0,9) == 0 && Map.GetLength(0) - 2 - height >= 0)
                 {
                     Map[Map.GetLength(0)-2-height, i] = "b";
+                }
+                if (rnd.Next(0, 9) == 0 && Map.GetLength(0) - 2 - height >= 0)
+                {
+                    Map[Map.GetLength(0) - 2 - height, i] = "c";
                 }
                 if (rnd.Next(0,4) == 0
                     && lastTree - i < -3
@@ -112,6 +118,10 @@ namespace KudoEngine
                     {
                         new BoxCollider2D(new Sprite2D(new(i * ScreenSize.X / gridSize.X, j * ScreenSize.Y / gridSize.Y), new(ScreenSize.X / gridSize.X, ScreenSize.Y / gridSize.Y), "plank", "Wood"), "tiles");
                     }
+                    else if (Map[j, i] == "c")
+                    {
+                        new BoxCollider2D(new Sprite2D(new(i * ScreenSize.X / gridSize.X, j * ScreenSize.Y / gridSize.Y), new(ScreenSize.X / gridSize.X, ScreenSize.Y / gridSize.Y), s.GetSprite("coin"), "Coin"), "collectible");
+                    }
                 }
             }
         }
@@ -124,6 +134,8 @@ namespace KudoEngine
 
             ActiveCamera = cam1;
 
+            s.AddSprite("coin", new(new(225, 385), new(35, 30)));
+
             MapGen();
             MapRender();
 
@@ -134,6 +146,8 @@ namespace KudoEngine
             playerPhysics = new Physics2D(playerCollider, new(new string[] {"tiles"}));
             playerPhysics.Weight = 10f;
             playerGroundCollider = new(player, "Ground Check", new(5f, 0f), new(0f, 1f));
+
+            playerScaleY = player.Scale.Y;
 
             // This is duplicate code, but I want bushed to render before the player
             // TODO: Add rendering layers
@@ -191,11 +205,20 @@ namespace KudoEngine
                 eocVelocity = -1;
             }
 
+            var a = playerCollider.GetCollisions();
+            foreach(var o in a)
+            {
+                if (o.Tag == "collectible" && o.Subject.IsAlive)
+                {
+                    o.Subject.Kill();
+                }
+            }
+
             eoc.Position.X += eocSpeed * eocVelocity;
 
             if (playerCollider.IsColliding(new(new string[] { "bosses" })))
             {
-                player.Kill();
+                playerCollider.Subject.Kill();
                 Skybox = Color.DarkRed;
             }
         }
@@ -230,6 +253,12 @@ namespace KudoEngine
             {
                 ActiveCamera.Zoom -= 0.01f;
             }
+            if (e.KeyCode == Keys.LControlKey)
+            {
+                playerCollider.ScaleModifier.Y = player.Scale.Y / 2f;
+                playerCollider.PositionModifier.Y -= player.Scale.Y / 2f;
+
+            }
         }
 
         public override void KeyUp(KeyEventArgs e)
@@ -249,6 +278,12 @@ namespace KudoEngine
             if (e.KeyCode == Keys.Right)
             {
                 right = false;
+            }
+            if (e.KeyCode == Keys.LControlKey)
+            {
+                playerCollider.PositionModifier.Y += player.Scale.Y / 2f;
+                playerCollider.ScaleModifier.Y = playerScaleY;
+
             }
         }
     }

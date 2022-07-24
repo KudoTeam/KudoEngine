@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+#pragma warning disable IDE1006
+
 namespace KudoEngine.Engine
 {
     /// <summary>
+    /// <see langword="Method"/>
     /// A simple good-looking console extension
     /// </summary>
     internal class Log
@@ -14,7 +17,7 @@ namespace KudoEngine.Engine
         /// <summary>
         /// Normal Console Log
         /// </summary>
-        public static void write(string message)
+        public static void write(dynamic message)
         {
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine(message);
@@ -24,7 +27,7 @@ namespace KudoEngine.Engine
         /// <summary>
         /// Highlighted Console Log
         /// </summary>
-        public static void mark(string message)
+        public static void mark(dynamic message)
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine(message);
@@ -34,7 +37,8 @@ namespace KudoEngine.Engine
         /// <summary>
         /// Warning Console Log
         /// </summary>
-        public static void warn(string message)
+         // Naming Styles
+        public static void warn(dynamic message)
         {
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine($"[WARN] {message}");
@@ -44,7 +48,7 @@ namespace KudoEngine.Engine
         /// <summary>
         /// Error Console Log
         /// </summary>
-        public static void error(string message)
+        public static void error(dynamic message)
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine($"[ERR] {message}");

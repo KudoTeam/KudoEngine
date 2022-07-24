@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace KudoEngine.Engine
 {
+    /// <summary>
+    /// <see langword="Type"/>
+    /// Contains <see langword="X"/> and <see langword="Y"/> values
+    /// </summary>
     public class Vector2
     {
         public float X { get; set; }

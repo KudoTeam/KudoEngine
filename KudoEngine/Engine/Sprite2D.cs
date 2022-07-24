@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 
-namespace KudoEngine.Engine.Objects
+namespace KudoEngine.Engine
 {
     /// <summary>
     /// <see langword="Object"/>
@@ -15,18 +15,17 @@ namespace KudoEngine.Engine.Objects
     {
         public Vector2 Position;
         public Vector2 Scale;
-        public string Directory;
+        public Bitmap Sprite;
         /// <summary>
         /// A cosmetic tag for debugging
         /// </summary>
         public string Tag;
 
-        public Bitmap Sprite;
-
-        public bool isAlive { get; private set; }
+        public string? Directory { get; private set; }
+        public bool IsAlive { get; private set; }
 
         /// <summary>
-        /// Initialize a new Sprite2D
+        /// Initialize a new Sprite2D from a .png image
         /// </summary>
         /// <param name="directory">A .png file for the texture (name only)</param>
         /// <param name="tag">A cosmetic tag for debugging</param>
@@ -40,7 +39,24 @@ namespace KudoEngine.Engine.Objects
             Image tmp = Image.FromFile($"Assets/Sprites/{Directory}.png");
             Sprite = new(tmp, (int)Scale.X, (int)Scale.Y);
 
-            isAlive = true;
+            IsAlive = true;
+
+            Kudo.AddSprite2D(this);
+        }
+
+        /// <summary>
+        /// Initialize a new Sprite2D from a bitmap/spritesheet
+        /// </summary>
+        /// <param name="sprite">A bitmap for the texture</param>
+        /// <param name="tag">A cosmetic tag for debugging</param>
+        public Sprite2D(Vector2 position, Vector2 scale, Bitmap sprite, string tag = "Sprite2D")
+        {
+            Position = position;
+            Scale = scale;
+            Sprite = sprite;
+            Tag = tag;
+
+            IsAlive = true;
 
             Kudo.AddSprite2D(this);
         }
@@ -58,9 +74,9 @@ namespace KudoEngine.Engine.Objects
         /// </summary>
         public void Kill()
         {
-            if (isAlive)
+            if (IsAlive)
             {
-                isAlive = false;
+                IsAlive = false;
 
                 Kudo.RemoveSprite2D(this);
                 // TODO: Remove class instance from memory
