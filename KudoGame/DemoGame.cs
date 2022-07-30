@@ -34,8 +34,8 @@ namespace KudoGame
 
         List<Sprite2D> coins = new();
 
-        SpriteSheet s = new(BitmapFromFile("2T"));
-        SpriteSheet ad = new(BitmapFromFile("ad"));
+        SpriteSheet s = new(BitmapFromFile("Sprites/2T"));
+        SpriteSheet ad = new(BitmapFromFile("Sprites/ad"));
 
 
         int eocVelocity = -1;
@@ -114,7 +114,7 @@ namespace KudoGame
                     }
                     else if (Map[j, i] == "p")
                     {
-                        new BoxCollider2D(new Sprite2D(new(i * ScreenSize.X / gridSize.X, j * ScreenSize.Y / gridSize.Y), new(ScreenSize.X / gridSize.X, ScreenSize.Y / gridSize.Y), BitmapFromFile("plank"), "Wood"), "tiles");
+                        new BoxCollider2D(new Sprite2D(new(i * ScreenSize.X / gridSize.X, j * ScreenSize.Y / gridSize.Y), new(ScreenSize.X / gridSize.X, ScreenSize.Y / gridSize.Y), BitmapFromFile("Sprites/plank"), "Wood"), "tiles");
                     }
                     else if (Map[j, i] == "c")
                     {
@@ -143,7 +143,7 @@ namespace KudoGame
             MapGen();
             MapRender();
 
-            eoc = new(new(550, 200), new(400, 200), BitmapFromFile("eoc"), "Boss");
+            eoc = new(new(550, 200), new(400, 200), BitmapFromFile("Sprites/eoc"), "Boss");
             eocCollider = new(eoc, "bosses", new(-30f, -30f));
             player = new(new(150, 150), new(70, 100), ad.GetSprite("idle"), "Player");
             playerCollider = new(player, "player", new(-21.5f, -3f));
@@ -161,7 +161,7 @@ namespace KudoGame
                 {
                     if (Map[j, i] == "b")
                     {
-                        new BoxCollider2D(new Sprite2D(new(i * ScreenSize.X / gridSize.X, j * ScreenSize.Y / gridSize.Y), new(ScreenSize.X / gridSize.X, ScreenSize.Y / gridSize.Y), BitmapFromFile("bush"), "Bush"), "bushes");
+                        new BoxCollider2D(new Sprite2D(new(i * ScreenSize.X / gridSize.X, j * ScreenSize.Y / gridSize.Y), new(ScreenSize.X / gridSize.X, ScreenSize.Y / gridSize.Y), BitmapFromFile("Sprites/bush"), "Bush"), "bushes");
                     }
                 }
             }

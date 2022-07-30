@@ -197,7 +197,7 @@ namespace KudoEngine
         #region Additional Methods
         public static Bitmap BitmapFromFile(string filename)
         {
-            Image tmp = Image.FromFile($"Assets/Sprites/{filename}.png");
+            Image tmp = Image.FromFile($"Assets/{filename}.png");
             return new Bitmap(tmp);
         }
         #endregion
