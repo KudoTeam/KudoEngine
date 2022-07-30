@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KudoGame", "KudoEngine\KudoGame.csproj", "{A088CF3F-2C9A-4E7F-8386-3EFCCC641BFD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KudoGame", "KudoGame\KudoGame.csproj", "{0CF7450A-760B-4605-88E3-CF19ADA9275B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KudoEngine", "KudoLibrary\KudoEngine.csproj", "{D0A7632D-FF7F-47FE-A93C-D39F22DA7193}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KudoEngine", "KudoEngine\KudoEngine.csproj", "{9CDD533F-1983-4C84-87EC-7825D3DBCD79}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A088CF3F-2C9A-4E7F-8386-3EFCCC641BFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A088CF3F-2C9A-4E7F-8386-3EFCCC641BFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A088CF3F-2C9A-4E7F-8386-3EFCCC641BFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A088CF3F-2C9A-4E7F-8386-3EFCCC641BFD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D0A7632D-FF7F-47FE-A93C-D39F22DA7193}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D0A7632D-FF7F-47FE-A93C-D39F22DA7193}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D0A7632D-FF7F-47FE-A93C-D39F22DA7193}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D0A7632D-FF7F-47FE-A93C-D39F22DA7193}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CF7450A-760B-4605-88E3-CF19ADA9275B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CF7450A-760B-4605-88E3-CF19ADA9275B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CF7450A-760B-4605-88E3-CF19ADA9275B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CF7450A-760B-4605-88E3-CF19ADA9275B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CDD533F-1983-4C84-87EC-7825D3DBCD79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CDD533F-1983-4C84-87EC-7825D3DBCD79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CDD533F-1983-4C84-87EC-7825D3DBCD79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CDD533F-1983-4C84-87EC-7825D3DBCD79}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
