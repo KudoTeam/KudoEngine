@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace KudoEngine.Engine
+﻿namespace KudoEngine
 {
     /// <summary>
-    /// <see langword="Extender"/>
+    /// <see langword="Kudo"/>
     /// Extends multiple objects and adds collisions
     /// </summary>
     public class BoxCollider2D

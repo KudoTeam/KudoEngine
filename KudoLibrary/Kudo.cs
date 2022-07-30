@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
-using System.Threading;
-using System.Windows.Forms;
-using System.Drawing.Drawing2D;
+﻿using System.Drawing.Drawing2D;
 
-namespace KudoEngine.Engine
+namespace KudoEngine
 {
     class Canvas : Form
     {
@@ -189,26 +181,26 @@ namespace KudoEngine.Engine
         /// <summary>
         /// This runs after the game is loaded
         /// </summary>
-        public abstract void Load();
+        public virtual void Load() { }
 
         /// <summary>
         /// This runs before the frame is rendered
         /// </summary>
-        public abstract void Draw();
+        public virtual void Draw() { }
 
         /// <summary>
         /// This runs after the frame is rendered
         /// </summary>
-        public abstract void Update();
+        public virtual void Update() { }
 
         /// <summary>
         /// This runs when a key is pressed
         /// </summary>
-        public abstract void KeyDown(KeyEventArgs e);
+        public virtual void KeyDown(KeyEventArgs e) { }
 
         /// <summary>
         /// This runs when a key is released
         /// </summary>
-        public abstract void KeyUp(KeyEventArgs e);
+        public virtual void KeyUp(KeyEventArgs e) { }
     }
 }

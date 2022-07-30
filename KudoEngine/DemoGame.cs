@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
-using KudoEngine.Engine;
+﻿using KudoEngine;
 
 // This file's code is effortless and is
 // just for testing purposes
-namespace KudoEngine
+namespace KudoGame
 {
     internal class DemoGame : Kudo
     {

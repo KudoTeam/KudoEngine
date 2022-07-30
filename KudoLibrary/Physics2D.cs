@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace KudoEngine.Engine
+﻿namespace KudoEngine
 {
     /// <summary>
-    /// <see langword="Extender"/>
+    /// <see langword="Kudo"/>
     /// Extends BoxCollider2D and adds physics
     /// </summary>
     public class Physics2D

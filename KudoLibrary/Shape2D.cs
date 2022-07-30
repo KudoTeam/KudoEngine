@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace KudoEngine.Engine
+﻿namespace KudoEngine
 {
     // TODO: Add other shapes
     /// <summary>
-    /// <see langword="Object"/>
+    /// <see langword="Kudo"/>
     /// A single-color rectangle
     /// </summary>
     public class Shape2D

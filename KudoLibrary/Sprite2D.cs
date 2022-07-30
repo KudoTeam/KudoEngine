@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
-
-namespace KudoEngine.Engine
+﻿namespace KudoEngine
 {
     /// <summary>
-    /// <see langword="Object"/>
+    /// <see langword="Kudo"/>
     /// A textured rectangle
     /// </summary>
     public class Sprite2D

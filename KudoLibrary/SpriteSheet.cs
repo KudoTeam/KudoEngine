@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace KudoEngine.Engine
+﻿namespace KudoEngine
 {
     /// <summary>
-    /// <see langword="Type"/>
+    /// <see langword="Kudo"/>
     /// Allows the usage of spritesheets
     /// </summary>
     public class SpriteSheet

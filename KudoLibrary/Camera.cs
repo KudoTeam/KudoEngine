@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace KudoEngine.Engine
+﻿namespace KudoEngine
 {
     /// <summary>
-    /// <see langword="Object"/>
+    /// <see langword="Kudo"/>
     /// This object allows the player to see the scene
     /// </summary>
     public class Camera

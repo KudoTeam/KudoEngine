@@ -1,4 +1,4 @@
-﻿namespace KudoEngine
+﻿namespace KudoGame
 {
     class Program
     {
