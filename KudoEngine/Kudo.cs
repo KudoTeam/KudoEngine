@@ -12,9 +12,9 @@ namespace KudoEngine
 
     public abstract class Kudo
     {
-        public Vector2 ScreenSize { get; private set; } = new(512,512);
-        private readonly string Title = "Kudo Game";
-        private Canvas Window;
+        public Vector2 ScreenSize { get; private set; }
+        public string Title { get; private set; }
+        private readonly Canvas Window;
         private readonly Thread GameLoopThread;
 
         // Accessible by the user
@@ -31,16 +31,18 @@ namespace KudoEngine
         /// </summary>
         public int Timer = 0;
 
-        public Kudo(Vector2 screenSize, string title)
+        public Kudo(Vector2 screenSize = null, string title = null)
         {
-            ScreenSize = screenSize;
-            Title = title;
+            ScreenSize = screenSize ?? new(512,512);
+            Title = title ?? Title ?? "Kudo Game";
 
-            Window = new Canvas();
-            Window.Size = new Size((int)ScreenSize.X, (int)ScreenSize.Y);
-            Window.Text = Title;
-            // Make Window Unresizable
-            Window.FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            Window = new Canvas
+            {
+                Size = new Size((int)ScreenSize.X, (int)ScreenSize.Y),
+                Text = Title,
+                // Make Window Unresizable
+                FormBorderStyle = FormBorderStyle.FixedToolWindow
+            };
             // Render Screen
             Window.Paint += Renderer;
             // Check Key Events
@@ -96,43 +98,29 @@ namespace KudoEngine
             }
         }
 
-        #region Shapes2D
-        public static List<Shape2D> Shapes2D { get; private set; } = new();
+        #region RenderedObjects2D
+        internal static List<RenderedObject2D> RenderedObjects2D { get; private set; } = new();
 
-        public static void AddShape2D(Shape2D shape)
+        internal static void AddRender2D(RenderedObject2D rendered)
         {
-            Shapes2D.Add(shape);
+            RenderedObjects2D.Add(rendered);
         }
 
-        public static void RemoveShape2D(Shape2D shape)
+        internal static void RemoveRender2D(RenderedObject2D rendered)
         {
-            Shapes2D.Remove(shape);
-        }
-        #endregion
-
-        #region Sprites2D
-        public static List<Sprite2D> Sprites2D { get; private set; } = new();
-
-        public static void AddSprite2D(Sprite2D sprite)
-        {
-            Sprites2D.Add(sprite);
-        }
-
-        public static void RemoveSprite2D(Sprite2D sprite)
-        {
-            Sprites2D.Remove(sprite);
+            RenderedObjects2D.Remove(rendered);
         }
         #endregion
 
         #region BoxColliders2D
-        public static List<BoxCollider2D> BoxColliders2D { get; private set; } = new();
+        internal static List<BoxCollider2D> BoxColliders2D { get; private set; } = new();
 
-        public static void AddBoxCollider2D(BoxCollider2D collider)
+        internal static void AddBoxCollider2D(BoxCollider2D collider)
         {
             BoxColliders2D.Add(collider);
         }
 
-        public static void RemoveBoxCollider2D(BoxCollider2D collider)
+        internal static void RemoveBoxCollider2D(BoxCollider2D collider)
         {
             BoxColliders2D.Remove(collider);
         }
@@ -163,16 +151,19 @@ namespace KudoEngine
             g.TranslateTransform(-Move.X, -Move.Y);
             #endregion
             #region Drawing
-            // Draw Shapes2D
-            foreach (Shape2D shape in Shapes2D.ToList())
+            // Draw RenderedObjects2D
+            foreach (RenderedObject2D rendered in RenderedObjects2D.ToList())
             {
-                g.FillRectangle(new SolidBrush(shape.Color), shape.Position.X, shape.Position.Y, shape.Scale.X, shape.Scale.Y);
+                switch(rendered) {
+                    case Shape2D r:
+                        g.FillRectangle(new SolidBrush(r.Color), r.Position.X, r.Position.Y, r.Scale.X, r.Scale.Y);
+                        break;
+                    case Sprite2D r:
+                        g.DrawImage(r.Sprite, r.Position.X, r.Position.Y, r.Scale.X, r.Scale.Y);
+                        break;
+                }
             }
-            // Draw Sprites2D
-            foreach (Sprite2D sprite in Sprites2D.ToList())
-            {
-                g.DrawImage(sprite.Sprite, sprite.Position.X, sprite.Position.Y, sprite.Scale.X, sprite.Scale.Y);
-            }
+            //g.DrawImage(sprite.Sprite, sprite.Position.X, sprite.Position.Y, sprite.Scale.X, sprite.Scale.Y);
             #endregion
             // Reset Transform
             g.ResetTransform();
@@ -202,5 +193,13 @@ namespace KudoEngine
         /// This runs when a key is released
         /// </summary>
         public virtual void KeyUp(KeyEventArgs e) { }
+
+        #region Additional Methods
+        public static Bitmap BitmapFromFile(string filename)
+        {
+            Image tmp = Image.FromFile($"Assets/Sprites/{filename}.png");
+            return new Bitmap(tmp);
+        }
+        #endregion
     }
 }

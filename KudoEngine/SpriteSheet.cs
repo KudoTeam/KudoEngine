@@ -6,7 +6,6 @@
     /// </summary>
     public class SpriteSheet
     {
-        public string Directory { get; private set; }
         public Bitmap Sprite { get; private set; }
         public Dictionary<string, Rectangle> Map { get; private set; } = new();
 
@@ -14,12 +13,9 @@
         /// Initialize a SpriteSheet
         /// </summary>
         /// <param name="directory">A .png file for the texture (name only)</param>
-        public SpriteSheet(string directory)
+        public SpriteSheet(Bitmap sprite)
         {
-            Directory = directory;
-
-            Image tmp = Image.FromFile($"Assets/Sprites/{Directory}.png");
-            Sprite = new(tmp);
+            Sprite = sprite;
         }
 
         /// <summary>

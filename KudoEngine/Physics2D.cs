@@ -11,6 +11,7 @@
         /// Hitbox colliders this instance interacts with
         /// </summary>
         public List<string> Tags { get; private set; }
+
         /// <summary>
         /// Current velocity
         /// </summary>
@@ -28,7 +29,7 @@
         /// </summary>
         public float Weight = 0.5f;
 
-        private Vector2 LastPosition = new();
+        private readonly Vector2 LastPosition = new();
 
         /// <summary>
         /// Initialize new Physics2D
@@ -51,9 +52,9 @@
                 Velocity.Y += Gravity;
             }
             // Change position based on velocity
-            Collider.Subject.Position.X += Velocity.X;
+            Collider.Rendered.Position.X += Velocity.X;
             StopHorizontalOnCollision();
-            Collider.Subject.Position.Y += Velocity.Y;
+            Collider.Rendered.Position.Y += Velocity.Y;
             BreakFallOnCollision();
             // Wear Out Horizontal Velocity
             if (Velocity.X > 0)
@@ -71,12 +72,12 @@
         {
             if (Collider.IsColliding(Tags))
             {
-                Collider.Subject.Position.Y = LastPosition.Y;
+                Collider.Rendered.Position.Y = LastPosition.Y;
                 Velocity.Y = 0;
             }
             else
             {
-                LastPosition.Y = Collider.Subject.Position.Y;
+                LastPosition.Y = Collider.Rendered.Position.Y;
             }
         }
 
@@ -84,12 +85,12 @@
         {
             if (Collider.IsColliding(Tags))
             {
-                Collider.Subject.Position.X = LastPosition.X;
+                Collider.Rendered.Position.X = LastPosition.X;
                 Velocity.X = 0;
             }
             else
             {
-                LastPosition.X = Collider.Subject.Position.X;
+                LastPosition.X = Collider.Rendered.Position.X;
             }
         }
     }

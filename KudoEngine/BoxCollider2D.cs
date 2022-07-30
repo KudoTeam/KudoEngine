@@ -6,46 +6,30 @@
     /// </summary>
     public class BoxCollider2D
     {
-        public dynamic Subject { get; private set; }
+        public RenderedObject2D Rendered { get; private set; }
         /// <summary>
         /// A tag to differentiate between colliders
         /// </summary>
-        public string Tag;
+        public string Tag { get; set; }
         /// <summary>
         /// Size of collider relative to subject
         /// </summary>
-        public Vector2 ScaleModifier;
+        public Vector2 ScaleModifier { get; set; }
         /// <summary>
         /// Position of collider relative to subject
         /// </summary>
-        public Vector2 PositionModifier;
+        public Vector2 PositionModifier { get; set; }
 
         /// <summary>
-        /// Initialize a new BoxCollider2D for a Shape2D
+        /// Initialize a new BoxCollider2D for a RenderedObject2D
         /// </summary>
         /// <param name="tag">A Name to differentiate between Colliders</param>
-        /// <param name="offset">Size of collider relative to Subject</param>
-        public BoxCollider2D(Shape2D shape, string tag = "", Vector2? scaleModifier = null, Vector2? positionModifier = null)
+        public BoxCollider2D(RenderedObject2D rendered, string tag = "", Vector2? scaleModifier = null, Vector2? positionModifier = null)
         {
-            Subject = shape;
+            Rendered = rendered;
             Tag = tag;
             ScaleModifier = scaleModifier ?? new();
             // TODO: Fix PositionModifier
-            PositionModifier = positionModifier ?? new();
-
-            Kudo.AddBoxCollider2D(this);
-        }
-
-        /// <summary>
-        /// Initialize a new BoxCollider2D for a Sprite2D
-        /// </summary>
-        /// <param name="tag">A Name to differentiate between Colliders</param>
-        /// <param name="offset">Size of collider relative to Subject</param>
-        public BoxCollider2D(Sprite2D sprite, string tag = "", Vector2? scaleModifier = null, Vector2? positionModifier = null)
-        {
-            Subject = sprite;
-            Tag = tag;
-            ScaleModifier = scaleModifier ?? new();
             PositionModifier = positionModifier ?? new();
 
             Kudo.AddBoxCollider2D(this);
@@ -62,10 +46,10 @@
             {
                 if (tags != null && tags.Any(collider.Tag.Contains) || tags == null)
                 {
-                    if (GetModifiedPosition(this).X - ScaleModifier.X < GetModifiedPosition(collider).X + collider.Subject.Scale.X + collider.ScaleModifier.X &&
-                        GetModifiedPosition(this).X + Subject.Scale.X + ScaleModifier.X > GetModifiedPosition(collider).X - collider.ScaleModifier.X &&
-                        GetModifiedPosition(this).Y - ScaleModifier.Y < GetModifiedPosition(collider).Y + collider.Subject.Scale.Y + collider.ScaleModifier.Y &&
-                        GetModifiedPosition(this).Y + Subject.Scale.Y + ScaleModifier.Y > GetModifiedPosition(collider).Y - collider.ScaleModifier.Y)
+                    if (GetModifiedPosition(this).X - ScaleModifier.X < GetModifiedPosition(collider).X + collider.Rendered.Scale.X + collider.ScaleModifier.X &&
+                        GetModifiedPosition(this).X + Rendered.Scale.X + ScaleModifier.X > GetModifiedPosition(collider).X - collider.ScaleModifier.X &&
+                        GetModifiedPosition(this).Y - ScaleModifier.Y < GetModifiedPosition(collider).Y + collider.Rendered.Scale.Y + collider.ScaleModifier.Y &&
+                        GetModifiedPosition(this).Y + Rendered.Scale.Y + ScaleModifier.Y > GetModifiedPosition(collider).Y - collider.ScaleModifier.Y)
                     {
                         return true;
                     }
@@ -86,10 +70,10 @@
             {
                 if (tags != null && tags.Any(collider.Tag.Contains) || tags == null)
                 {
-                    if (GetModifiedPosition(this).X - ScaleModifier.X < GetModifiedPosition(collider).X + collider.Subject.Scale.X + collider.ScaleModifier.X &&
-                        GetModifiedPosition(this).X + Subject.Scale.X + ScaleModifier.X > GetModifiedPosition(collider).X - collider.ScaleModifier.X &&
-                        GetModifiedPosition(this).Y - ScaleModifier.Y < GetModifiedPosition(collider).Y + collider.Subject.Scale.Y + collider.ScaleModifier.Y &&
-                        GetModifiedPosition(this).Y + Subject.Scale.Y + ScaleModifier.Y > GetModifiedPosition(collider).Y - collider.ScaleModifier.Y)
+                    if (GetModifiedPosition(this).X - ScaleModifier.X < GetModifiedPosition(collider).X + collider.Rendered.Scale.X + collider.ScaleModifier.X &&
+                        GetModifiedPosition(this).X + Rendered.Scale.X + ScaleModifier.X > GetModifiedPosition(collider).X - collider.ScaleModifier.X &&
+                        GetModifiedPosition(this).Y - ScaleModifier.Y < GetModifiedPosition(collider).Y + collider.Rendered.Scale.Y + collider.ScaleModifier.Y &&
+                        GetModifiedPosition(this).Y + Rendered.Scale.Y + ScaleModifier.Y > GetModifiedPosition(collider).Y - collider.ScaleModifier.Y)
                     {
                         collisions.Add(collider);
                     }
@@ -98,9 +82,9 @@
             return collisions;
         }
 
-        private Vector2 GetModifiedPosition(BoxCollider2D collider)
+        private static Vector2 GetModifiedPosition(BoxCollider2D collider)
         {
-            return new(collider.Subject.Position.X + collider.PositionModifier.X, collider.Subject.Position.Y + collider.PositionModifier.Y);
+            return new(collider.Rendered.Position.X + collider.PositionModifier.X, collider.Rendered.Position.Y + collider.PositionModifier.Y);
         }
     }
 }

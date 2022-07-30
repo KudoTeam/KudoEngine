@@ -1,10 +1,12 @@
-﻿namespace KudoGame
+﻿using KudoEngine;
+
+namespace KudoGame
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            DemoGame game = new();
+            DemoGame _ = new();
         }
     }
 }

@@ -6,6 +6,7 @@ namespace KudoGame
 {
     internal class DemoGame : Kudo
     {
+        public DemoGame() : base(new Vector2(1080, 607), "Kudo Test Demo") { }
 
         bool left;
         bool right;
@@ -16,9 +17,7 @@ namespace KudoGame
 
         public float DefaultMovementSpeed = 8f;
 
-        string[,] Map = new string[10,60];
-
-        public DemoGame() : base(new Vector2(1080, 607),"Kudo Test Demo") { }
+        string[,] Map = new string[10, 60];
 
         Sprite2D player;
         BoxCollider2D playerCollider;
@@ -44,7 +43,7 @@ namespace KudoGame
 
         public bool isGrounded(BoxCollider2D playerGroundCollider)
         {
-            if (playerGroundCollider.IsColliding(new(new string[] {"tiles"})))
+            if (playerGroundCollider.IsColliding(new(new string[] { "tiles" })))
             {
                 return true;
             }
@@ -65,15 +64,15 @@ namespace KudoGame
                         Map[Map.GetLength(0) - 1 - j, i] = "g";
                     }
                 }
-                if (rnd.Next(0,9) == 0 && Map.GetLength(0) - 2 - height >= 0)
+                if (rnd.Next(0, 9) == 0 && Map.GetLength(0) - 2 - height >= 0)
                 {
-                    Map[Map.GetLength(0)-2-height, i] = "b";
+                    Map[Map.GetLength(0) - 2 - height, i] = "b";
                 }
                 if (rnd.Next(0, 9) == 0 && Map.GetLength(0) - 2 - height >= 0)
                 {
                     Map[Map.GetLength(0) - 2 - height, i] = "c";
                 }
-                if (rnd.Next(0,4) == 0
+                if (rnd.Next(0, 4) == 0
                     && lastTree - i < -3
                     && Map.GetLength(0) - 5 - height >= 0
                     && Map.GetLength(1) - 1 > i + 1
@@ -90,15 +89,16 @@ namespace KudoGame
                 }
                 if (height > 0)
                 {
-                    if (rnd.Next(0,2) == 0)
+                    if (rnd.Next(0, 2) == 0)
                     {
                         height += rnd.Next(-1, 2);
                     }
-                } else
+                }
+                else
                 {
                     height++;
                 }
-                
+
             }
         }
 
@@ -114,7 +114,7 @@ namespace KudoGame
                     }
                     else if (Map[j, i] == "p")
                     {
-                        new BoxCollider2D(new Sprite2D(new(i * ScreenSize.X / gridSize.X, j * ScreenSize.Y / gridSize.Y), new(ScreenSize.X / gridSize.X, ScreenSize.Y / gridSize.Y), "plank", "Wood"), "tiles");
+                        new BoxCollider2D(new Sprite2D(new(i * ScreenSize.X / gridSize.X, j * ScreenSize.Y / gridSize.Y), new(ScreenSize.X / gridSize.X, ScreenSize.Y / gridSize.Y), BitmapFromFile("plank"), "Wood"), "tiles");
                     }
                     else if (Map[j, i] == "c")
                     {
@@ -135,19 +135,19 @@ namespace KudoGame
             s.AddSprite("coin", new(new(225, 385), new(35, 30)));
 
             ad.AddSprite("idle", new(new(5, 11), new(18, 20)));
-            for(int i = 0;i<8;i++)
+            for (int i = 0; i < 8; i++)
             {
-                ad.AddSprite("walk"+i, new(new(5+32*i, 41), new(18, 20)));
+                ad.AddSprite("walk" + i, new(new(5 + 32 * i, 41), new(18, 20)));
             }
 
             MapGen();
             MapRender();
 
-            eoc = new(new(550, 200), new(400, 200), "eoc", "Boss");
-            eocCollider = new(eoc, "bosses", new(-30f,-30f));
+            eoc = new(new(550, 200), new(400, 200), BitmapFromFile("eoc"), "Boss");
+            eocCollider = new(eoc, "bosses", new(-30f, -30f));
             player = new(new(150, 150), new(70, 100), ad.GetSprite("idle"), "Player");
-            playerCollider = new(player, "player", new(-21.5f,-3f));
-            playerPhysics = new Physics2D(playerCollider, new(new string[] {"tiles"}));
+            playerCollider = new(player, "player", new(-21.5f, -3f));
+            playerPhysics = new Physics2D(playerCollider, new(new string[] { "tiles" }));
             playerPhysics.Weight = 10f;
             playerGroundCollider = new(player, "Ground Check", new(5f, 0f), new(0f, 1f));
 
@@ -161,11 +161,11 @@ namespace KudoGame
                 {
                     if (Map[j, i] == "b")
                     {
-                        new BoxCollider2D(new Sprite2D(new(i * ScreenSize.X / gridSize.X, j * ScreenSize.Y / gridSize.Y), new(ScreenSize.X / gridSize.X, ScreenSize.Y / gridSize.Y), "bush", "Bush"), "bushes");
+                        new BoxCollider2D(new Sprite2D(new(i * ScreenSize.X / gridSize.X, j * ScreenSize.Y / gridSize.Y), new(ScreenSize.X / gridSize.X, ScreenSize.Y / gridSize.Y), BitmapFromFile("bush"), "Bush"), "bushes");
                     }
                 }
             }
-                }
+        }
 
         public override void Draw()
         {
@@ -175,7 +175,7 @@ namespace KudoGame
         int animation = 0;
 
         public override void Update()
-        {      
+        {
             float MovementSpeed = DefaultMovementSpeed;
 
             cam1.Position = player.Center();
@@ -187,7 +187,7 @@ namespace KudoGame
 
             if (up && isGrounded(playerGroundCollider))
             {
-                playerPhysics.Velocity.Y = -MovementSpeed*2;
+                playerPhysics.Velocity.Y = -MovementSpeed * 2;
             }
             if (down)
             {
@@ -224,7 +224,8 @@ namespace KudoGame
             if (eoc.Position.X <= 300)
             {
                 eocVelocity = 1;
-            } else if (eoc.Position.X >= 600)
+            }
+            else if (eoc.Position.X >= 600)
             {
                 eocVelocity = -1;
             }
@@ -232,9 +233,9 @@ namespace KudoGame
             var a = playerCollider.GetCollisions();
             foreach (var o in a)
             {
-                if (o.Tag == "collectible" && o.Subject.IsAlive)
+                if (o.Tag == "collectible" && o.Rendered.IsAlive)
                 {
-                    o.Subject.Kill();
+                    o.Rendered.Kill();
                 }
             }
 
@@ -242,7 +243,7 @@ namespace KudoGame
 
             if (playerCollider.IsColliding(new(new string[] { "bosses" })))
             {
-                playerCollider.Subject.Kill();
+                playerCollider.Rendered.Kill();
                 Skybox = Color.DarkRed;
             }
         }
@@ -250,7 +251,7 @@ namespace KudoGame
         public override void KeyDown(KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Up)
-{
+            {
                 up = true;
             }
             if (e.KeyCode == Keys.Left)

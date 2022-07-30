@@ -6,9 +6,9 @@
     /// </summary>
     public class Camera
     {
-        public Vector2 Position;
-        public float Rotation;
-        public float Zoom;
+        public Vector2 Position { get; set; }
+        public float Rotation { get; set; }
+        public float Zoom { get; set; }
 
         /// <summary>
         /// Initialize a new Camera
