@@ -34,8 +34,8 @@ namespace KudoGame
 
         List<Sprite2D> coins = new();
 
-        SpriteSheet s = new("2T");
-        SpriteSheet ad = new("ad");
+        SpriteSheet s = new(BitmapFromFile("2T"));
+        SpriteSheet ad = new(BitmapFromFile("ad"));
 
 
         int eocVelocity = -1;
