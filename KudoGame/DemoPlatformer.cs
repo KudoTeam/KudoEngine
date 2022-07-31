@@ -2,11 +2,12 @@
 
 // This file's code is effortless and is
 // just for testing purposes
+// Don't copy this to your own game
 namespace KudoGame
 {
-    internal class DemoGame : Kudo
+    internal class DemoPlatformer : Kudo
     {
-        public DemoGame() : base(new Vector2(1080, 607), "Kudo Test Demo") { }
+        public DemoPlatformer() : base(new Vector2(1080, 607), "Kudo Test Demo") { }
 
         bool left;
         bool right;

@@ -11,5 +11,13 @@
         {
             return PressedKeys.ContainsKey(key);
         }
+
+        /// <summary>
+        /// Get a List of all pressed keys
+        /// </summary>
+        public static List<Keys> GetKeysDown()
+        {
+            return new(PressedKeys.Keys);
+        }
     }
 }

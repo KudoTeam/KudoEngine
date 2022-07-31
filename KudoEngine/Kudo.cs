@@ -25,7 +25,7 @@ namespace KudoEngine
         /// <summary>
         /// Current Camera
         /// </summary>
-        public Camera ActiveCamera = new(new(),1);
+        public Camera ActiveCamera = new(new());
         /// <summary>
         /// Increments after each frame
         /// </summary>
@@ -103,7 +103,7 @@ namespace KudoEngine
                 {
                     // Constantly refresh window
                     Draw();
-                    Window.BeginInvoke((MethodInvoker)delegate { Window.Refresh(); });
+                    Window.BeginInvoke((MethodInvoker) delegate { Window.Refresh(); });
                     Update();
                     Timer++;
                     Thread.Sleep(1);

@@ -29,8 +29,6 @@
         /// </summary>
         public float Weight = 0.5f;
 
-        private readonly Vector2 LastPosition = new();
-
         /// <summary>
         /// Initialize new Physics2D
         /// </summary>
@@ -53,9 +51,15 @@
             }
             // Change position based on velocity
             Collider.Rendered.Position.X += Velocity.X;
-            StopHorizontalOnCollision();
+            if (Collider.StopHorizontalCollision(Tags))
+            {
+                Velocity.X = 0;
+            }
             Collider.Rendered.Position.Y += Velocity.Y;
-            BreakFallOnCollision();
+            if (Collider.StopVerticalCollision(Tags))
+            {
+                Velocity.Y = 0;
+            }
             // Wear Out Horizontal Velocity
             if (Velocity.X > 0)
             {
@@ -65,32 +69,6 @@
             if (Velocity.X < 0)
             {
                 Velocity.X = Math.Min(Velocity.X + Weight, 0);
-            }
-        }
-
-        private void BreakFallOnCollision()
-        {
-            if (Collider.IsColliding(Tags))
-            {
-                Collider.Rendered.Position.Y = LastPosition.Y;
-                Velocity.Y = 0;
-            }
-            else
-            {
-                LastPosition.Y = Collider.Rendered.Position.Y;
-            }
-        }
-
-        private void StopHorizontalOnCollision()
-        {
-            if (Collider.IsColliding(Tags))
-            {
-                Collider.Rendered.Position.X = LastPosition.X;
-                Velocity.X = 0;
-            }
-            else
-            {
-                LastPosition.X = Collider.Rendered.Position.X;
             }
         }
     }

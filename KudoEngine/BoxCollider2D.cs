@@ -19,6 +19,9 @@
         /// Position of collider relative to subject
         /// </summary>
         public Vector2 PositionModifier { get; set; }
+        
+
+        private readonly Vector2 LastPosition = new();
 
         /// <summary>
         /// Initialize a new BoxCollider2D for a RenderedObject2D
@@ -78,7 +81,48 @@
             return collisions;
         }
 
-        private static Vector2 GetModifiedPosition(BoxCollider2D collider)
+        public bool StopCollision(List<string>? tags = null)
+        {
+            // TODO: Not tested - may cause bugs
+            if (
+            StopVerticalCollision(tags) ||
+            StopHorizontalCollision(tags))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool StopVerticalCollision(List<string>? tags = null)
+        {
+            if (tags == null || IsColliding(tags))
+            {
+                Rendered.Position.Y = LastPosition.Y;
+                return true;
+            }
+            else
+            {
+                LastPosition.Y = Rendered.Position.Y;
+                return false;
+            }
+        }
+
+        public bool StopHorizontalCollision(List<string>? tags = null)
+        {
+            if (tags == null || IsColliding(tags))
+            {
+                Rendered.Position.X = LastPosition.X;
+                return true;
+            }
+            else
+            {
+                LastPosition.X = Rendered.Position.X;
+                return false;
+            }
+        }
+
+            private static Vector2 GetModifiedPosition(BoxCollider2D collider)
         {
             return new(collider.Rendered.Position.X + collider.PositionModifier.X, collider.Rendered.Position.Y + collider.PositionModifier.Y);
         }
