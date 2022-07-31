@@ -6,7 +6,7 @@ namespace KudoEngine
     /// <see langword="Kudo"/>
     /// A simple good-looking console extension
     /// </summary>
-    internal class Log
+    public class Log
     {
         /// <summary>
         /// Normal Console Log

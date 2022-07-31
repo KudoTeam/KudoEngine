@@ -13,7 +13,7 @@ namespace KudoGame
         bool up;
         bool down;
 
-        Vector2 gridSize = new(16, 9);
+        static Vector2 gridSize = new(16, 9);
 
         public float DefaultMovementSpeed = 8f;
 
@@ -43,7 +43,7 @@ namespace KudoGame
 
         public bool isGrounded(BoxCollider2D playerGroundCollider)
         {
-            if (playerGroundCollider.IsColliding(new(new string[] { "tiles" })))
+            if (playerGroundCollider.IsColliding(new List<string>() { "tiles" }))
             {
                 return true;
             }
@@ -64,6 +64,7 @@ namespace KudoGame
                         Map[Map.GetLength(0) - 1 - j, i] = "g";
                     }
                 }
+
                 if (rnd.Next(0, 9) == 0 && Map.GetLength(0) - 2 - height >= 0)
                 {
                     Map[Map.GetLength(0) - 2 - height, i] = "b";
@@ -102,6 +103,8 @@ namespace KudoGame
             }
         }
 
+        static readonly Vector2 tileSize = new(ScreenSize.X / gridSize.X, ScreenSize.Y / gridSize.Y);
+
         public void MapRender()
         {
             for (int i = 0; i < Map.GetLength(1); i++)
@@ -110,15 +113,15 @@ namespace KudoGame
                 {
                     if (Map[j, i] == "g")
                     {
-                        new BoxCollider2D(new Shape2D(new(i * ScreenSize.X / gridSize.X, j * ScreenSize.Y / gridSize.Y), new(ScreenSize.X / gridSize.X, ScreenSize.Y / gridSize.Y), Color.DarkGreen, "Ground"), "tiles");
+                        _ = new BoxCollider2D(new Shape2D(new((i * tileSize.X),(j * tileSize.Y)), tileSize, Color.DarkGreen, "Ground"), "tiles");
                     }
                     else if (Map[j, i] == "p")
                     {
-                        new BoxCollider2D(new Sprite2D(new(i * ScreenSize.X / gridSize.X, j * ScreenSize.Y / gridSize.Y), new(ScreenSize.X / gridSize.X, ScreenSize.Y / gridSize.Y), BitmapFromFile("Sprites/plank"), "Wood"), "tiles");
+                        _ = new BoxCollider2D(new Sprite2D(new((i * tileSize.X),(j * tileSize.Y)), tileSize, BitmapFromFile("Sprites/plank"), "Wood"), "tiles");
                     }
                     else if (Map[j, i] == "c")
                     {
-                        new BoxCollider2D(new Sprite2D(new(i * ScreenSize.X / gridSize.X, j * ScreenSize.Y / gridSize.Y), new(ScreenSize.X / gridSize.X, ScreenSize.Y / gridSize.Y), s.GetSprite("coin"), "Coin"), "collectible");
+                        _ = new BoxCollider2D(new Sprite2D(new((i * tileSize.X),(j * tileSize.Y)), tileSize, s.GetSprite("coin"), "Coin"), "collectible");
                     }
                 }
             }
@@ -146,7 +149,7 @@ namespace KudoGame
             eoc = new(new(550, 200), new(400, 200), BitmapFromFile("Sprites/eoc"), "Boss");
             eocCollider = new(eoc, "bosses", new(-30f, -30f));
             player = new(new(150, 150), new(70, 100), ad.GetSprite("idle"), "Player");
-            playerCollider = new(player, "player", new(-21.5f, -3f));
+            playerCollider = new(player, "player", new(-17.5f, -3f), new(-1f,0f));
             playerPhysics = new Physics2D(playerCollider, new(new string[] { "tiles" }));
             playerPhysics.Weight = 10f;
             playerGroundCollider = new(player, "Ground Check", new(5f, 0f), new(0f, 1f));
@@ -180,12 +183,12 @@ namespace KudoGame
 
             cam1.Position = player.Center();
 
-            if (playerCollider.IsColliding(new(new string[] { "bushes" })))
+            if (playerCollider.IsColliding(new List<string>() { "bushes" }))
             {
                 MovementSpeed /= 5f;
             }
 
-            if (up && isGrounded(playerGroundCollider))
+            if (Input.IsKeyDown(Keys.Up) && isGrounded(playerGroundCollider))
             {
                 playerPhysics.Velocity.Y = -MovementSpeed * 2;
             }
@@ -195,7 +198,7 @@ namespace KudoGame
             }
             if (left)
             {
-                // TODO: Implement this as an Extender
+                // TODO: Implement this as an Object
                 if (Timer % 5 == 0)
                 {
                     animation++;
@@ -230,10 +233,10 @@ namespace KudoGame
                 eocVelocity = -1;
             }
 
-            var a = playerCollider.GetCollisions();
+            var a = playerCollider.GetCollisions(new() { "collectible" });
             foreach (var o in a)
             {
-                if (o.Tag == "collectible" && o.Rendered.IsAlive)
+                if (o.Rendered.IsAlive)
                 {
                     o.Rendered.Kill();
                 }
@@ -241,7 +244,7 @@ namespace KudoGame
 
             eoc.Position.X += eocSpeed * eocVelocity;
 
-            if (playerCollider.IsColliding(new(new string[] { "bosses" })))
+            if (playerCollider.IsColliding(eocCollider))
             {
                 playerCollider.Rendered.Kill();
                 Skybox = Color.DarkRed;

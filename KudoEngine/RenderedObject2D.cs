@@ -29,7 +29,10 @@
                 IsAlive = false;
 
                 Kudo.RemoveRender2D(this);
+
                 // TODO: Remove class instance from memory
+                // Temporary Fix
+                Position = new(420420420420, 6969696969);
             }
             else
             {

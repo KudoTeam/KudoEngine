@@ -6,14 +6,14 @@ namespace KudoEngine
     {
         public Canvas()
         {
-            this.DoubleBuffered = true;
+            DoubleBuffered = true;
         }
     }
 
     public abstract class Kudo
     {
-        public Vector2 ScreenSize { get; private set; }
-        public string Title { get; private set; }
+        public static Vector2 ScreenSize { get; private set; } = new(512, 512);
+        public static string Title { get; private set; } = "Kudo Game";
         private readonly Canvas Window;
         private readonly Thread GameLoopThread;
 
@@ -31,10 +31,10 @@ namespace KudoEngine
         /// </summary>
         public int Timer = 0;
 
-        public Kudo(Vector2 screenSize = null, string title = null)
+        public Kudo(Vector2? screenSize = null, string? title = null)
         {
-            ScreenSize = screenSize ?? new(512,512);
-            Title = title ?? Title ?? "Kudo Game";
+            ScreenSize = screenSize ?? ScreenSize;
+            Title = title ?? Title;
 
             Window = new Canvas
             {
@@ -45,9 +45,14 @@ namespace KudoEngine
             };
             // Render Screen
             Window.Paint += Renderer;
+            #region Input
             // Check Key Events
             Window.KeyDown += KeyDown;
             Window.KeyUp += KeyUp;
+            // Input Class Communication
+            Window.KeyDown += InputKeyDown;
+            Window.KeyUp += InputKeyUp;
+            #endregion
             // On Close Events
             Window.FormClosing += Quit;
 
@@ -65,7 +70,8 @@ namespace KudoEngine
             // TODO: Abort thread
         }
 
-        #region HardwareInteractions
+        #region Input
+        // Events
         private void KeyDown(object? sender, KeyEventArgs e)
         {
             KeyDown(e);
@@ -74,6 +80,17 @@ namespace KudoEngine
         private void KeyUp(object? sender, KeyEventArgs e)
         {
             KeyUp(e);
+        }
+
+        // Input Class
+        private static void InputKeyDown(object? sender, KeyEventArgs e)
+        {
+            Input.PressedKeys[e.KeyCode] = true;
+        }
+
+        private static void InputKeyUp(object? sender, KeyEventArgs e)
+        {
+            Input.PressedKeys.Remove(e.KeyCode);
         }
         #endregion
 

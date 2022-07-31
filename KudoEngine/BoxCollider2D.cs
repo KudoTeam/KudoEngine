@@ -29,7 +29,6 @@
             Rendered = rendered;
             Tag = tag;
             ScaleModifier = scaleModifier ?? new();
-            // TODO: Fix PositionModifier
             PositionModifier = positionModifier ?? new();
 
             Kudo.AddBoxCollider2D(this);
@@ -38,45 +37,42 @@
         // Every compatible type needs to be added
 
         /// <summary>
+        /// Check if colliding with another instance of BoxCollider2D
+        /// </summary>
+        public bool IsColliding(BoxCollider2D collider)
+        {
+            return GetModifiedPosition(this).X - ScaleModifier.X < GetModifiedPosition(collider).X + collider.Rendered.Scale.X + collider.ScaleModifier.X &&
+                   GetModifiedPosition(this).X + Rendered.Scale.X + ScaleModifier.X > GetModifiedPosition(collider).X - collider.ScaleModifier.X &&
+                   GetModifiedPosition(this).Y - ScaleModifier.Y < GetModifiedPosition(collider).Y + collider.Rendered.Scale.Y + collider.ScaleModifier.Y &&
+                   GetModifiedPosition(this).Y + Rendered.Scale.Y + ScaleModifier.Y > GetModifiedPosition(collider).Y - collider.ScaleModifier.Y;
+        }
+
+        /// <summary>
         /// Check if colliding with another BoxCollider2D with a certain tag/tags
         /// </summary>
         public bool IsColliding(List<string>? tags = null)
         {
             foreach (BoxCollider2D collider in Kudo.BoxColliders2D)
             {
-                if (tags != null && tags.Any(collider.Tag.Contains) || tags == null)
+                if (tags == null || tags.Contains(collider.Tag) && IsColliding(collider))
                 {
-                    if (GetModifiedPosition(this).X - ScaleModifier.X < GetModifiedPosition(collider).X + collider.Rendered.Scale.X + collider.ScaleModifier.X &&
-                        GetModifiedPosition(this).X + Rendered.Scale.X + ScaleModifier.X > GetModifiedPosition(collider).X - collider.ScaleModifier.X &&
-                        GetModifiedPosition(this).Y - ScaleModifier.Y < GetModifiedPosition(collider).Y + collider.Rendered.Scale.Y + collider.ScaleModifier.Y &&
-                        GetModifiedPosition(this).Y + Rendered.Scale.Y + ScaleModifier.Y > GetModifiedPosition(collider).Y - collider.ScaleModifier.Y)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
-
             return false;
         }
 
-        // TODO: Fix tags
         /// <summary>
-        /// Get all BoxColliders2D this collider is colliding with
+        /// Get all BoxColliders2D with a certain tag this collider is colliding with
         /// </summary>
         public List<BoxCollider2D> GetCollisions(List<string>? tags = null)
         {
             List<BoxCollider2D> collisions = new();
             foreach (BoxCollider2D collider in Kudo.BoxColliders2D)
             {
-                if (tags != null && tags.Any(collider.Tag.Contains) || tags == null)
+                if (tags == null || tags.Contains(collider.Tag) && IsColliding(collider))
                 {
-                    if (GetModifiedPosition(this).X - ScaleModifier.X < GetModifiedPosition(collider).X + collider.Rendered.Scale.X + collider.ScaleModifier.X &&
-                        GetModifiedPosition(this).X + Rendered.Scale.X + ScaleModifier.X > GetModifiedPosition(collider).X - collider.ScaleModifier.X &&
-                        GetModifiedPosition(this).Y - ScaleModifier.Y < GetModifiedPosition(collider).Y + collider.Rendered.Scale.Y + collider.ScaleModifier.Y &&
-                        GetModifiedPosition(this).Y + Rendered.Scale.Y + ScaleModifier.Y > GetModifiedPosition(collider).Y - collider.ScaleModifier.Y)
-                    {
-                        collisions.Add(collider);
-                    }
+                    collisions.Add(collider);
                 }
             }
             return collisions;
