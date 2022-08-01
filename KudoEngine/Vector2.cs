@@ -42,5 +42,13 @@
         {
             return new(X + Math.Sign(target.X - X) * step, Y + Math.Sign(target.Y - Y) * step);
         }
+
+        /// <summary>
+        /// Initialize a new Vector2 based on this Vector2
+        /// </summary>
+        public Vector2 Copy()
+        {
+            return new(X, Y);
+        }
     }
 }
