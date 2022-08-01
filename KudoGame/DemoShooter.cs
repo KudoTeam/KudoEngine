@@ -126,5 +126,12 @@ namespace KudoGame
                     break;
             }
         }
+
+        public override void MouseDown(MouseEventArgs e)
+        {
+            Log.write($"{Input.ScreenMousePosition.X}:{Input.ScreenMousePosition.Y}");
+            Log.write($"{Input.MousePosition.X}:{Input.MousePosition.Y}");
+            player.Position = Input.MousePosition;
+        }
     }
 }

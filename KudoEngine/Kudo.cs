@@ -49,13 +49,17 @@ namespace KudoEngine
             // Check Key Events
             Window.KeyDown += KeyDown;
             Window.KeyUp += KeyUp;
-            // Input Class Communication
+            // Send Key Input
             Window.KeyDown += InputKeyDown;
             Window.KeyUp += InputKeyUp;
+            // Check Mouse Events
+            Window.MouseClick += MouseDown;
+            Window.MouseMove += MouseMove;
+            // Check Mouse Input
+            Window.MouseMove += InputMouseMove;
             #endregion
             // On Close Events
             Window.FormClosing += Quit;
-
             // Make a thread to refresh window asynchronously
             GameLoopThread = new Thread(GameLoop/*here*/);
             GameLoopThread.Start();
@@ -71,7 +75,7 @@ namespace KudoEngine
         }
 
         #region Input
-        // Events
+        // Key Events
         private void KeyDown(object? sender, KeyEventArgs e)
         {
             KeyDown(e);
@@ -82,7 +86,7 @@ namespace KudoEngine
             KeyUp(e);
         }
 
-        // Input Class
+        // Key Input
         private static void InputKeyDown(object? sender, KeyEventArgs e)
         {
             Input.PressedKeys[e.KeyCode] = true;
@@ -92,6 +96,28 @@ namespace KudoEngine
         {
             Input.PressedKeys.Remove(e.KeyCode);
         }
+
+        // Mouse Events
+        private void MouseDown(object? sender, MouseEventArgs e)
+        {
+            MouseDown(e);
+        }
+
+        private void MouseMove(object? sender, MouseEventArgs e)
+        {
+            MouseMove(e);
+        }
+
+        // Mouse Input
+        private void InputMouseMove(object? sender, MouseEventArgs e)
+        {
+            // TODO: Compatibility with Rotation and Zoom
+            Input.MousePosition = new(e.Location.X - ScreenSize.X / 2 + ActiveCamera.Position.X,
+                e.Location.Y - ScreenSize.Y / 2 + ActiveCamera.Position.Y);
+
+            Input.ScreenMousePosition = new(e.Location.X, e.Location.Y);
+        }
+
         #endregion
 
         void GameLoop()
@@ -210,6 +236,18 @@ namespace KudoEngine
         /// This runs when a key is released
         /// </summary>
         public virtual void KeyUp(KeyEventArgs e) { }
+
+        /// <summary>
+        /// This runs when the mouse is clicked
+        /// </summary>
+        /// <param name="e"></param>
+        public virtual void MouseDown(MouseEventArgs e) { }
+
+        /// <summary>
+        /// This runs when the mouse is moved
+        /// </summary>
+        /// <param name="e"></param>
+        public virtual void MouseMove(MouseEventArgs e) { }
 
         #region Additional Methods
         public static Bitmap BitmapFromFile(string filename)

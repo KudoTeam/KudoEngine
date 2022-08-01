@@ -88,13 +88,10 @@
         public bool StopCollision(List<string>? tags = null)
         {
             // TODO: Not tested - may cause bugs
-            if (
-            StopVerticalCollision(tags) ||
-            StopHorizontalCollision(tags))
+            if (StopVerticalCollision(tags)) { if (StopHorizontalCollision(tags))
             {
                 return true;
-            }
-
+            }}
             return false;
         }
 

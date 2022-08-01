@@ -2,6 +2,15 @@
 {
     public class Input
     {
+        /// <summary>
+        /// Position of mouse in the world
+        /// </summary>
+        public static Vector2 MousePosition { get; internal set; } = new();
+        /// <summary>
+        /// Position of mouse on screen
+        /// </summary>
+        public static Vector2 ScreenMousePosition { get; internal set; } = new();
+
         internal static Dictionary<Keys, bool> PressedKeys { get; set; } = new();
 
         /// <summary>
