@@ -19,7 +19,7 @@
         /// Position of collider relative to subject
         /// </summary>
         public Vector2 PositionModifier { get; set; }
-        
+
 
         private readonly Vector2 _lastPosition = new();
 
@@ -39,6 +39,7 @@
 
         // Every compatible type needs to be added
 
+        #region IsColliding
         /// <summary>
         /// Check if colliding with another instance of BoxCollider2D
         /// </summary>
@@ -73,15 +74,7 @@
         /// </summary>
         public bool IsColliding(List<string>? tags = null)
         {
-            return IsColliding(out BoxCollider2D? _, tags);
-        }
-
-        /// <summary>
-        /// Check if colliding with another BoxCollider2D with a certain tag
-        /// </summary>
-        public bool IsColliding(string tag)
-        {
-            return IsColliding(new List<string>() { tag });
+            return IsColliding(out _, tags);
         }
 
         /// <summary>
@@ -93,6 +86,16 @@
             return IsColliding(out collider, new List<string>() { tag });
         }
 
+        /// <summary>
+        /// Check if colliding with another BoxCollider2D with a certain tag
+        /// </summary>
+        public bool IsColliding(string tag)
+        {
+            return IsColliding(out _, tag);
+        }
+        #endregion
+
+        #region GetCollisions
         /// <summary>
         /// Get all BoxColliders2D with a certain tag this collider is colliding with
         /// </summary>
@@ -110,26 +113,70 @@
         }
 
         /// <summary>
-        /// Stop all collisions
+        /// Get all BoxColliders2D with a certain tag this collider is colliding with
+        /// </summary>
+        public List<BoxCollider2D> GetCollisions(string tag)
+        {
+            return GetCollisions(new List<string>() { tag });
+        }
+        #endregion
+
+        #region StopCollision
+        /// <summary>
+        /// Stop all collisions with a certain collider
+        /// </summary>
+        /// <returns>If collision was stopped</returns>
+        public bool StopCollision(BoxCollider2D collider)
+        {
+            return StopVerticalCollision(collider) && StopHorizontalCollision(collider);
+        }
+
+        /// <summary>
+        /// Stop all collisions with colliders with certain tags
+        /// </summary>
+        /// <returns>If collision was stopped</returns>
+        /// <param name="collider">The collider that returned true</param>
+        public bool StopCollision(out BoxCollider2D? collider, List<string>? tags = null)
+        {
+            return StopVerticalCollision(out collider, tags) && StopHorizontalCollision(out collider, tags);
+        }
+
+        /// <summary>
+        /// Stop all collisions with colliders with certain tags
         /// </summary>
         /// <returns>If collision was stopped</returns>
         public bool StopCollision(List<string>? tags = null)
         {
-            // TODO: Not tested - may cause bugs
-            if (StopVerticalCollision(tags)) { if (StopHorizontalCollision(tags))
-            {
-                return true;
-            }}
-            return false;
+            return StopCollision(out _, tags);
         }
 
         /// <summary>
-        /// Stop all vertical collisions
+        /// Stop all collisions with colliders with a certain tag
         /// </summary>
         /// <returns>If collision was stopped</returns>
-        public bool StopVerticalCollision(List<string>? tags = null)
+        /// <param name="collider">The collider that returned true</param>
+        public bool StopCollision(out BoxCollider2D? collider, string tag)
         {
-            if (tags == null || IsColliding(tags))
+            return StopCollision(out collider, new List<string>() { tag });
+        }
+
+        /// <summary>
+        /// Stop all collisions with colliders with a certain tag
+        /// </summary>
+        /// <returns>If collision was stopped</returns>
+        public bool StopCollision(string tag)
+        {
+            return StopCollision(out _, tag);
+        }
+
+        #region StopVerticalCollision
+        /// <summary>
+        /// Stop all vertical collisions with a certain collider
+        /// </summary>
+        /// <returns>If collision was stopped</returns>
+        public bool StopVerticalCollision(BoxCollider2D collider)
+        {
+            if (IsColliding(collider))
             {
                 Rendered.Position.Y = _lastPosition.Y;
                 return true;
@@ -142,12 +189,61 @@
         }
 
         /// <summary>
-        /// Stop all horizontal collisions
+        /// Stop all vertical collisions with certain tags
         /// </summary>
         /// <returns>If collision was stopped</returns>
-        public bool StopHorizontalCollision(List<string>? tags = null)
+        /// <param name="collider">The collider that returned true</param>
+        public bool StopVerticalCollision(out BoxCollider2D? collider, List<string>? tags = null)
         {
-            if (tags == null || IsColliding(tags))
+                if (IsColliding(out BoxCollider2D? collision, tags))
+                {
+                    if (collision != null)
+                    {
+                        collider = collision;
+                        return StopVerticalCollision(collider);
+                    }
+                }
+            collider = null;
+            return false;
+        }
+
+        /// <summary>
+        /// Stop all vertical collisions with certain tags
+        /// </summary>
+        /// <returns>If collision was stopped</returns>
+        public bool StopVerticalCollision(List<string>? tags = null)
+        {
+            return StopVerticalCollision(out _, tags);
+        }
+
+        /// <summary>
+        /// Stop all vertical collisions with a certain tag
+        /// </summary>
+        /// <returns>If collision was stopped</returns>
+        /// <param name="collider">The collider that returned true</param>
+        public bool StopVerticalCollision(out BoxCollider2D? collider, string tag)
+        {
+            return StopVerticalCollision(out collider, new List<string>() { tag });
+        }
+
+        /// <summary>
+        /// Stop all vertical collisions with a certain tag
+        /// </summary>
+        /// <returns>If collision was stopped</returns>
+        public bool StopVerticalCollision(string tag)
+        {
+            return StopVerticalCollision(out _, tag);
+        }
+        #endregion
+
+        #region StopHorizontalCollision
+        /// <summary>
+        /// Stop all horizontal collisions with a certain collider
+        /// </summary>
+        /// <returns>If collision was stopped</returns>
+        public bool StopHorizontalCollision(BoxCollider2D collider)
+        {
+            if (IsColliding(collider))
             {
                 Rendered.Position.X = _lastPosition.X;
                 return true;
@@ -158,6 +254,55 @@
                 return false;
             }
         }
+
+        /// <summary>
+        /// Stop all horizontal collisions with certain tags
+        /// </summary>
+        /// <returns>If collision was stopped</returns>
+        /// <param name="collider">The collider that returned true</param>
+        public bool StopHorizontalCollision(out BoxCollider2D? collider, List<string>? tags = null)
+        {
+            if (IsColliding(out BoxCollider2D? collision, tags))
+            {
+                if (collision != null)
+                {
+                    collider = collision;
+                    return StopHorizontalCollision(collider);
+                }
+            }
+            collider = null;
+            return false;
+        }
+
+        /// <summary>
+        /// Stop all horizontal collisions with certain tags
+        /// </summary>
+        /// <returns>If collision was stopped</returns>
+        public bool StopHorizontalCollision(List<string>? tags = null)
+        {
+            return StopHorizontalCollision(out _, tags);
+        }
+        /// <summary>
+        /// Stop all horizontal collisions with a certain tag
+        /// </summary>
+        /// <returns>If collision was stopped</returns>
+        /// <param name="collider">The collider that returned true</param>
+        public bool StopHorizontalCollision(out BoxCollider2D? collider, string tag)
+        {
+            return StopHorizontalCollision(out collider, new List<string>() { tag });
+        }
+
+        /// <summary>
+        /// Stop all horizontal collisions with a certain tag
+        /// </summary>
+        /// <returns>If collision was stopped</returns>
+        public bool StopHorizontalCollision(string tag)
+        {
+            return StopHorizontalCollision(out _, tag);
+        }
+        #endregion
+
+        #endregion
 
         private static Vector2 GetModifiedPosition(BoxCollider2D collider)
         {

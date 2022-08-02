@@ -230,7 +230,7 @@ namespace KudoGame
             {
                 if (o.Rendered.IsAlive)
                 {
-                    o.Rendered.Dispose();
+                    o.Rendered.Kill();
                 }
             }
 
@@ -238,7 +238,7 @@ namespace KudoGame
 
             if (playerCollider.IsColliding(eocCollider))
             {
-                playerCollider.Rendered.Dispose();
+                playerCollider.Rendered.Kill();
                 Skybox = Color.DarkRed;
             }
         }

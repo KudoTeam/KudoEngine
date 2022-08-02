@@ -113,8 +113,8 @@ namespace KudoGame
                 if (enemy.Get("collider").IsColliding(out BoxCollider2D bulletCollider, "bullet"))
                 {
                     enemies.Remove(enemy);
-                    enemy.Get("sprite").Dispose();
-                    bulletCollider.Rendered.Dispose();
+                    enemy.Get("sprite").Kill();
+                    bulletCollider.Rendered.Kill();
                 }
             }
 

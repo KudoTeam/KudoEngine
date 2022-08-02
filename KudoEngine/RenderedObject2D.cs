@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace KudoEngine
 {
-    public abstract class RenderedObject2D : IDisposable
+    public abstract class RenderedObject2D
     {
         public Vector2 Position { get; set; } = new();
         public Vector2 Scale { get; set; } = new();
@@ -26,15 +26,7 @@ namespace KudoEngine
             return new(Position.X + Scale.X / 2, Position.Y + Scale.Y / 2);
         }
 
-        #region Dispose
-        // To detect redundant calls
-        private bool _disposedValue;
-
-        // Instantiate a SafeHandle instance.
-        private readonly SafeHandle _safeHandle = new SafeFileHandle(IntPtr.Zero, true);
-
-        // Public implementation of Dispose pattern callable by consumers.
-        public void Dispose()
+        public bool Kill()
         {
             if (Kudo.RenderedObjects2D.Contains(this))
             {
@@ -42,23 +34,7 @@ namespace KudoEngine
             }
             IsAlive = false;
 
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            return true;
         }
-
-        // Protected implementation of Dispose pattern.
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!_disposedValue)
-            {
-                if (disposing)
-                {
-                    _safeHandle.Dispose();
-                }
-
-                _disposedValue = true;
-            }
-        }
-        #endregion
     }
 }
