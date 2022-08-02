@@ -53,9 +53,12 @@ namespace KudoEngine
             Window.KeyDown += InputKeyDown;
             Window.KeyUp += InputKeyUp;
             // Check Mouse Events
-            Window.MouseClick += MouseDown;
+            Window.MouseDown += MouseDown;
+            Window.MouseUp += MouseUp;
             Window.MouseMove += MouseMove;
             // Check Mouse Input
+            Window.MouseDown += InputMouseDown;
+            Window.MouseUp += InputMouseUp;
             Window.MouseMove += InputMouseMove;
             #endregion
             // On Close Events
@@ -103,12 +106,27 @@ namespace KudoEngine
             MouseDown(e);
         }
 
+        private void MouseUp(object? sender, MouseEventArgs e)
+        {
+            MouseUp(e);
+        }
+
         private void MouseMove(object? sender, MouseEventArgs e)
         {
             MouseMove(e);
         }
 
         // Mouse Input
+        private void InputMouseDown(object? sender, MouseEventArgs e)
+        {
+            Input.PressedMouse[e.Button] = true;
+        }
+
+        private void InputMouseUp(object? sender, MouseEventArgs e)
+        {
+            Input.PressedMouse.Remove(e.Button);
+        }
+
         private void InputMouseMove(object? sender, MouseEventArgs e)
         {
             // TODO: Compatibility with Rotation and Zoom
@@ -182,34 +200,70 @@ namespace KudoEngine
             // Clear screen
             g.Clear(Skybox);
             #region Camera
-            // Adjust Camera Position
-            g.TranslateTransform(-ActiveCamera.Position.X + ScreenSize.X / 2f, -ActiveCamera.Position.Y + ScreenSize.Y / 2f);
-            // Adjust Camera Rotation
-            g.TranslateTransform(Move.X, Move.Y);
-            g.RotateTransform(ActiveCamera.Rotation);
-            g.TranslateTransform(-Move.X, -Move.Y);
-            // Adjust Camera Zoom
-            g.TranslateTransform(Move.X, Move.Y);
-            g.ScaleTransform(ActiveCamera.Zoom, ActiveCamera.Zoom);
-            g.TranslateTransform(-Move.X, -Move.Y);
+            void ApplyCamera()
+            {
+                // Adjust Camera Position
+                g.TranslateTransform(-ActiveCamera.Position.X + ScreenSize.X / 2f, -ActiveCamera.Position.Y + ScreenSize.Y / 2f);
+                // Adjust Camera Rotation
+                g.TranslateTransform(Move.X, Move.Y);
+                g.RotateTransform(ActiveCamera.Rotation);
+                g.TranslateTransform(-Move.X, -Move.Y);
+                // Adjust Camera Zoom
+                g.TranslateTransform(Move.X, Move.Y);
+                g.ScaleTransform(ActiveCamera.Zoom, ActiveCamera.Zoom);
+                g.TranslateTransform(-Move.X, -Move.Y);
+            }
+            #endregion
+            #region Layer Binary Sort
+            static List<RenderedObject2D> BiSort(List<RenderedObject2D> list)
+            {
+                bool run = true;
+                while (run)
+                {
+                    int curr = -1000;
+                    bool finished = true;
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        int prev = curr;
+                        curr = list[i].Layer;
+                        if (prev > curr)
+                        {
+                            finished = false;
+                            RenderedObject2D tmp = list[i];
+                            list[i] = list[i - 1];
+                            list[i - 1] = tmp;
+                            break;
+                        }
+                    }
+                    if (finished) { run = false; }
+                }
+                return list;
+            }
             #endregion
             #region Drawing
-            // Draw RenderedObjects2D
-            foreach (RenderedObject2D rendered in RenderedObjects2D.ToList())
+            List<RenderedObject2D> queue = BiSort(RenderedObjects2D.ToList());
+            foreach (RenderedObject2D rendered in queue)
             {
-                switch(rendered) {
+                // Apply Camera Effects (unless disabled with layer 1000)
+                if (rendered.Layer != 1000) { ApplyCamera(); }
+
+                // Draw RenderedObjects2D
+                switch (rendered) {
                     case Shape2D r:
                         g.FillRectangle(new SolidBrush(r.Color), r.Position.X, r.Position.Y, r.Scale.X, r.Scale.Y);
                         break;
                     case Sprite2D r:
                         g.DrawImage(r.Sprite, r.Position.X, r.Position.Y, r.Scale.X, r.Scale.Y);
                         break;
+                    case Text2D r:
+                        g.DrawString(r.Text, r.Font, new SolidBrush(r.Color), new Rectangle((int)r.Position.X, (int)r.Position.Y, (int)r.Scale.X, (int)r.Scale.Y));
+                        break;
                 }
+
+                // Reset Transform
+                g.ResetTransform();
             }
-            //g.DrawImage(sprite.Sprite, sprite.Position.X, sprite.Position.Y, sprite.Scale.X, sprite.Scale.Y);
             #endregion
-            // Reset Transform
-            g.ResetTransform();
         }
 
         /// <summary>
@@ -238,13 +292,19 @@ namespace KudoEngine
         public virtual void KeyUp(KeyEventArgs e) { }
 
         /// <summary>
-        /// This runs when the mouse is clicked
+        /// This runs when the mouse is clicked in the window
         /// </summary>
         /// <param name="e"></param>
         public virtual void MouseDown(MouseEventArgs e) { }
 
         /// <summary>
-        /// This runs when the mouse is moved
+        /// This runs when the mouse is released in the window
+        /// </summary>
+        /// <param name="e"></param>
+        public virtual void MouseUp(MouseEventArgs e) { }
+
+        /// <summary>
+        /// This runs when the mouse is moved in the window
         /// </summary>
         /// <param name="e"></param>
         public virtual void MouseMove(MouseEventArgs e) { }

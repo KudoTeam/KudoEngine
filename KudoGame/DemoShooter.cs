@@ -4,7 +4,7 @@ namespace KudoGame
 {
     // This is good engine code
     // You can copy this to your own game
-    internal partial class DemoShooter : Kudo
+    internal class DemoShooter : Kudo
     {
         public DemoShooter() : base(new Vector2(600, 600), "Shooter Game") { }
 
@@ -14,6 +14,10 @@ namespace KudoGame
         Sprite2D player;
         BoxCollider2D playerCollider;
 
+        int playerHealth = 5;
+        readonly int immunityFrame = 50;
+        int lastDamage = 0;
+
         readonly float MovementSpeed = 5f;
 
         // shooting
@@ -22,7 +26,13 @@ namespace KudoGame
         List<ExpandableObject> bullets = new();
 
         // Enemies
+        int maxEnemies = 3;
+
         readonly List<ExpandableObject> enemies = new();
+
+        // UI
+        string healthTextString = "Health: ";
+        Text2D healthText;
 
         // === FUNCTIONS === //
 
@@ -32,7 +42,10 @@ namespace KudoGame
 
             // Player
             player = new Sprite2D(new(), new(85, 85), BitmapFromFile("Sprites/Bro"));
-            playerCollider = new BoxCollider2D(player, "player");
+            playerCollider = new BoxCollider2D(player, "player", new(-20f,-10f));
+
+            // UI
+            healthText = new Text2D(new(10, 10), new(100, 20), healthTextString + playerHealth, Color.Red, default, "HealthText", 1000);
         }
 
         public override void Update()
@@ -63,7 +76,7 @@ namespace KudoGame
             player.Position.X += MovementSpeed * axis.X;
 
             // Enemy Spawn System
-            if (Timer % 100 == 0)
+            if (Timer % 100 == 0 && enemies.Count < maxEnemies)
             {
                 Random rnd = new Random();
 
@@ -82,11 +95,33 @@ namespace KudoGame
                 // Move Towards Player
                 enemy.Get("sprite").Position = enemy.Get("sprite").Position.MoveTowards(player.Position, 1f);
 
+                // Damage Player
+                if (enemy.Get("collider").IsColliding(playerCollider) && immunityFrame < Timer - lastDamage && playerHealth > 0)
+                {
+                    playerHealth--;
+                    lastDamage = Timer;
+                    healthText.Text = healthTextString + playerHealth;
+                }
+
                 // Get Pushed By Player
                 if (enemy.Get("collider").IsColliding(playerCollider))
                 {
                     enemy.Get("sprite").Position = enemy.Get("sprite").Position.MoveTowards(player.Position, -MovementSpeed * 2);
                 }
+
+                // Die By Bullet
+                if (enemy.Get("collider").IsColliding(out BoxCollider2D bulletCollider, "bullet"))
+                {
+                    enemies.Remove(enemy);
+                    enemy.Get("sprite").Dispose();
+                    bulletCollider.Rendered.Dispose();
+                }
+            }
+
+            // Drag Player
+            if (Input.IsMouseDown())
+            {
+                player.Position = Input.MousePosition;
             }
 
             // Bullet Behaviour
@@ -125,13 +160,6 @@ namespace KudoGame
                     canShoot = true;
                     break;
             }
-        }
-
-        public override void MouseDown(MouseEventArgs e)
-        {
-            Log.write($"{Input.ScreenMousePosition.X}:{Input.ScreenMousePosition.Y}");
-            Log.write($"{Input.MousePosition.X}:{Input.MousePosition.Y}");
-            player.Position = Input.MousePosition;
         }
     }
 }

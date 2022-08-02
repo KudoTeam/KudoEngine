@@ -53,16 +53,44 @@
         /// <summary>
         /// Check if colliding with another BoxCollider2D with a certain tag/tags
         /// </summary>
-        public bool IsColliding(List<string>? tags = null)
+        /// <param name="collider">The collider that returned true</param>
+        public bool IsColliding(out BoxCollider2D? collider, List<string>? tags = null)
         {
-            foreach (BoxCollider2D collider in Kudo.BoxColliders2D)
+            foreach (BoxCollider2D collision in Kudo.BoxColliders2D)
             {
-                if (tags == null || tags.Contains(collider.Tag) && IsColliding(collider))
+                if (tags == null || tags.Contains(collision.Tag) && IsColliding(collision))
                 {
+                    collider = collision;
                     return true;
                 }
             }
+            collider = null;
             return false;
+        }
+
+        /// <summary>
+        /// Check if colliding with another BoxCollider2D with certain tags
+        /// </summary>
+        public bool IsColliding(List<string>? tags = null)
+        {
+            return IsColliding(out BoxCollider2D? _, tags);
+        }
+
+        /// <summary>
+        /// Check if colliding with another BoxCollider2D with a certain tag
+        /// </summary>
+        public bool IsColliding(string tag)
+        {
+            return IsColliding(new List<string>() { tag });
+        }
+
+        /// <summary>
+        /// Check if colliding with another BoxCollider2D with a certain tag
+        /// </summary>
+        /// <param name="collider">The collider that returned true</param>
+        public bool IsColliding(out BoxCollider2D? collider, string tag)
+        {
+            return IsColliding(out collider, new List<string>() { tag });
         }
 
         /// <summary>

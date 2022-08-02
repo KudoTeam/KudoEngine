@@ -19,6 +19,15 @@
         }
 
         /// <summary>
+        /// Initialize a new Vector2 with the same values
+        /// </summary>
+        public Vector2(float xy)
+        {
+            X = xy;
+            Y = xy;
+        }
+
+        /// <summary>
         /// Initialize a new Vector2 with values
         /// </summary>
         public Vector2(float x, float y)

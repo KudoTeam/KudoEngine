@@ -1,6 +1,9 @@
-﻿namespace KudoEngine
+﻿using Microsoft.Win32.SafeHandles;
+using System.Runtime.InteropServices;
+
+namespace KudoEngine
 {
-    public abstract class RenderedObject2D
+    public abstract class RenderedObject2D : IDisposable
     {
         public Vector2 Position { get; set; } = new();
         public Vector2 Scale { get; set; } = new();
@@ -8,8 +11,12 @@
         /// A cosmetic tag for debugging
         /// </summary>
         public string Tag { get; set; } = "RenderedObject2D";
+        /// <summary>
+        /// Rendering layer (0 is the lowest)
+        /// </summary>
+        public int Layer { get; set; } = 0;
 
-        public bool IsAlive { get; private protected set; }
+        public bool IsAlive { get; private protected set; } = true;
 
         /// <summary>
         /// Get center position of RenderedObject2D instance
@@ -19,25 +26,39 @@
             return new(Position.X + Scale.X / 2, Position.Y + Scale.Y / 2);
         }
 
-        /// <summary>
-        /// Remove RenderedObject2D instance from memory
-        /// </summary>
-        public void Kill()
+        #region Dispose
+        // To detect redundant calls
+        private bool _disposedValue;
+
+        // Instantiate a SafeHandle instance.
+        private readonly SafeHandle _safeHandle = new SafeFileHandle(IntPtr.Zero, true);
+
+        // Public implementation of Dispose pattern callable by consumers.
+        public void Dispose()
         {
-            if (IsAlive)
+            if (Kudo.RenderedObjects2D.Contains(this))
             {
-                IsAlive = false;
-
                 Kudo.RemoveRender2D(this);
-
-                // TODO: Remove class instance from memory
-                // Temporary Fix
-                Position = new(420420420420, 6969696969);
             }
-            else
+            IsAlive = false;
+
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        // Protected implementation of Dispose pattern.
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposedValue)
             {
-                Log.error("This sprite does not exist");
+                if (disposing)
+                {
+                    _safeHandle.Dispose();
+                }
+
+                _disposedValue = true;
             }
         }
+        #endregion
     }
 }

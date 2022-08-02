@@ -29,8 +29,6 @@ namespace KudoGame
 
         float playerScaleY;
 
-        public Vector2 lastPos;
-
         Camera cam1;
 
         List<Sprite2D> coins = new();
@@ -124,6 +122,10 @@ namespace KudoGame
                     {
                         _ = new BoxCollider2D(new Sprite2D(new((i * tileSize.X),(j * tileSize.Y)), tileSize, s.GetSprite("coin"), "Coin"), "collectible");
                     }
+                    else if (Map[j, i] == "b")
+                    {
+                        new BoxCollider2D(new Sprite2D(new(i * ScreenSize.X / gridSize.X, j * ScreenSize.Y / gridSize.Y), new(ScreenSize.X / gridSize.X, ScreenSize.Y / gridSize.Y), BitmapFromFile("Sprites/bush"), "Bush", 1), "bushes");
+                    }
                 }
             }
         }
@@ -135,6 +137,8 @@ namespace KudoGame
             cam1 = new(new());
 
             ActiveCamera = cam1;
+
+            Shape2D someButton = new(new(10, 10), new(50, 50), Color.Red, "button", 1000);
 
             s.AddSprite("coin", new(new(225, 385), new(35, 30)));
 
@@ -156,19 +160,6 @@ namespace KudoGame
             playerGroundCollider = new(player, "Ground Check", new(5f, 0f), new(0f, 1f));
 
             playerScaleY = player.Scale.Y;
-
-            // This is duplicate code, but I want bushed to render before the player
-            // TODO: Add rendering layers
-            for (int i = 0; i < Map.GetLength(1); i++)
-            {
-                for (int j = 0; j < Map.GetLength(0); j++)
-                {
-                    if (Map[j, i] == "b")
-                    {
-                        new BoxCollider2D(new Sprite2D(new(i * ScreenSize.X / gridSize.X, j * ScreenSize.Y / gridSize.Y), new(ScreenSize.X / gridSize.X, ScreenSize.Y / gridSize.Y), BitmapFromFile("Sprites/bush"), "Bush"), "bushes");
-                    }
-                }
-            }
         }
 
         public override void Draw()
@@ -239,7 +230,7 @@ namespace KudoGame
             {
                 if (o.Rendered.IsAlive)
                 {
-                    o.Rendered.Kill();
+                    o.Rendered.Dispose();
                 }
             }
 
@@ -247,7 +238,7 @@ namespace KudoGame
 
             if (playerCollider.IsColliding(eocCollider))
             {
-                playerCollider.Rendered.Kill();
+                playerCollider.Rendered.Dispose();
                 Skybox = Color.DarkRed;
             }
         }
