@@ -225,7 +225,7 @@ namespace KudoGame
                 eocVelocity = -1;
             }
 
-            var a = playerCollider.GetCollisions(new() { "collectible" });
+            var a = playerCollider.GetCollisions("collectible");
             foreach (var o in a)
             {
                 if (o.Rendered.IsAlive)

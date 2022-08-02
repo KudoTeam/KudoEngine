@@ -22,16 +22,17 @@ namespace KudoGame
 
         // shooting
         bool canShoot = true;
-        Vector2 shootAxis = new();
-        List<ExpandableObject> bullets = new();
+        readonly List<ExpandableObject> bullets = new();
+        readonly float bulletSpeed = 15f;
 
         // Enemies
-        int maxEnemies = 3;
+        readonly int maxEnemies = 5;
+        readonly int spawnDelay = 75;
 
         readonly List<ExpandableObject> enemies = new();
 
         // UI
-        string healthTextString = "Health: ";
+        readonly string healthTextString = "Health: ";
         Text2D healthText;
 
         // === FUNCTIONS === //
@@ -52,31 +53,27 @@ namespace KudoGame
         {
             // Movement
             Vector2 axis = new();
-            if (Input.IsKeyDown(Keys.Up))
+            if (Input.IsKeyDown(Keys.W))
             {
                 axis.Y = -1;
-                shootAxis = axis.Copy();
             } else
-            if (Input.IsKeyDown(Keys.Down))
+            if (Input.IsKeyDown(Keys.S))
             {
                 axis.Y = 1;
-                shootAxis = axis.Copy();
             }
-            if (Input.IsKeyDown(Keys.Left))
+            if (Input.IsKeyDown(Keys.A))
             {
                 axis.X = -1;
-                shootAxis = axis.Copy();
             } else
-            if (Input.IsKeyDown(Keys.Right))
+            if (Input.IsKeyDown(Keys.D))
             {
                 axis.X = 1;
-                shootAxis = axis.Copy();
             }
             player.Position.Y += MovementSpeed * axis.Y;
             player.Position.X += MovementSpeed * axis.X;
 
             // Enemy Spawn System
-            if (Timer % 100 == 0 && enemies.Count < maxEnemies)
+            if (Timer % spawnDelay == 0 && enemies.Count < maxEnemies)
             {
                 Random rnd = new Random();
 
@@ -112,54 +109,55 @@ namespace KudoGame
                 // Die By Bullet
                 if (enemy.Get("collider").IsColliding(out BoxCollider2D bulletCollider, "bullet"))
                 {
-                    enemies.Remove(enemy);
-                    enemy.Get("sprite").Kill();
-                    bulletCollider.Rendered.Kill();
+                    if (bulletCollider.Rendered.IsAlive)
+                    {
+                        enemies.Remove(enemy);
+                        enemy.Get("sprite").Kill();
+                        bulletCollider.Rendered.Kill();
+                    }
                 }
-            }
-
-            // Drag Player
-            if (Input.IsMouseDown())
-            {
-                player.Position = Input.MousePosition;
             }
 
             // Bullet Behaviour
             foreach (ExpandableObject bullet in bullets)
             {
-                bullet.Get("sprite").Position.X += bullet.Get("direction").X * 20f;
-                bullet.Get("sprite").Position.Y += bullet.Get("direction").Y * 20f;
+                // Shoot in direction of cursor
+                bullet.Get("sprite").Position = bullet.Get("sprite").Position.Add(new Vector2((float)Math.Cos(bullet.Get("direction")), (float)Math.Sin(bullet.Get("direction"))).Multiply(new(bulletSpeed)));
             }
         }
 
-        public override void KeyDown(KeyEventArgs e)
+        public ExpandableObject? Shoot(double angle)
         {
-            switch (e.KeyCode)
+            if (canShoot)
             {
-                case Keys.X:
-                    if (!canShoot) { break; }
 
-                    ExpandableObject bullet = new();
-                    bullet.Set("sprite", new Sprite2D(new(player.Center().X - 10, player.Center().Y - 10), new(20, 20), BitmapFromFile("Sprites/Bullet")));
-                    bullet.Set("collider", new BoxCollider2D(bullet.Get("sprite"), "bullet"));
-                    bullet.Set("direction", shootAxis.Copy());
+                ExpandableObject bullet = new();
+                bullet.Set("sprite", new Sprite2D(new(player.Center().X - 10, player.Center().Y - 10), new(20, 20), BitmapFromFile("Sprites/Bullet")));
+                bullet.Set("collider", new BoxCollider2D(bullet.Get("sprite"), "bullet"));
+                bullet.Set("direction", angle);
+                bullet.Set("active", true);
 
-                    bullets.Add(bullet);
+                bullets.Add(bullet);
 
-                    canShoot = false;
+                canShoot = false;
 
-                    break;
+                return bullet;
             }
+
+            return null;
         }
 
-        public override void KeyUp(KeyEventArgs e)
+        public override void MouseDown(MouseEventArgs e)
         {
-            switch (e.KeyCode)
-            {
-                case Keys.X:
-                    canShoot = true;
-                    break;
-            }
+            // Calculate cursor angle relative to player
+            double cursorAngle = Math.Atan2(Input.MousePosition.Y - player.Position.Y, Input.MousePosition.X - player.Position.X);
+            Shoot(cursorAngle);
+            
+        }
+
+        public override void MouseUp(MouseEventArgs e)
+        {
+            canShoot = true;
         }
     }
 }
