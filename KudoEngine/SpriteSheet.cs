@@ -10,7 +10,7 @@
         public Dictionary<string, Rectangle> Map { get; private set; } = new();
 
         /// <summary>
-        /// Initialize a SpriteSheet
+        /// Initialize a new SpriteSheet
         /// </summary>
         /// <param name="directory">A .png file for the texture (name only)</param>
         public SpriteSheet(Bitmap sprite)

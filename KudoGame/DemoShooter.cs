@@ -32,7 +32,7 @@ namespace KudoGame
         readonly List<ExpandableObject> enemies = new();
 
         // UI
-        readonly string healthTextString = "Health: ";
+        readonly string healthTextString = "Health:";
         Text2D healthText;
 
         // === FUNCTIONS === //
@@ -122,7 +122,9 @@ namespace KudoGame
             foreach (ExpandableObject bullet in bullets)
             {
                 // Shoot in direction of cursor
-                bullet.Get("sprite").Position = bullet.Get("sprite").Position.Add(new Vector2((float)Math.Cos(bullet.Get("direction")), (float)Math.Sin(bullet.Get("direction"))).Multiply(new(bulletSpeed)));
+                bullet.Get("sprite").Position = bullet.Get("sprite").Position.MoveInDirection(bullet.Get("direction"), bulletSpeed);
+
+
             }
         }
 
@@ -150,7 +152,7 @@ namespace KudoGame
         public override void MouseDown(MouseEventArgs e)
         {
             // Calculate cursor angle relative to player
-            double cursorAngle = Math.Atan2(Input.MousePosition.Y - player.Position.Y, Input.MousePosition.X - player.Position.X);
+            double cursorAngle = player.Position.GetRelativeAngle(Input.MousePosition);
             Shoot(cursorAngle);
             
         }

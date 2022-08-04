@@ -9,7 +9,7 @@
         public Bitmap Sprite { get; set; }
 
         /// <summary>
-        /// Initialize a new Sprite2D from a bitmap/spritesheet
+        /// Initialize a new Sprite2D
         /// </summary>
         /// <param name="sprite">A bitmap for the texture</param>
         /// <param name="tag">A cosmetic tag for debugging</param>

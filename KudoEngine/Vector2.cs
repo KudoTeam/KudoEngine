@@ -45,6 +45,14 @@
         }
 
         /// <summary>
+        /// Initialize a new Vector2 based on this Vector2
+        /// </summary>
+        public Vector2 Copy()
+        {
+            return new(X, Y);
+        }
+
+        /// <summary>
         /// Return a Vector2 value added to this Vector2
         /// </summary>
         public Vector2 Add(Vector2 vector)
@@ -77,14 +85,6 @@
         }
 
         /// <summary>
-        /// Return this Vector2 raised to the specified power
-        /// </summary>
-        public Vector2 Pow(double power)
-        {
-            return new((float)Math.Pow(X, power), (float)Math.Pow(Y, power));
-        }
-
-        /// <summary>
         /// Return a Vector2 with absolute values based on this Vector2
         /// </summary>
         public Vector2 Abs()
@@ -93,23 +93,39 @@
         }
 
         /// <summary>
-        /// Initialize a new Vector2 based on this Vector2
+        /// Return this Vector2 raised to the specified power
         /// </summary>
-        public Vector2 Copy()
+        public Vector2 Pow(double power)
         {
-            return new(X, Y);
+            return new((float)Math.Pow(X, power), (float)Math.Pow(Y, power));
         }
 
         /// <summary>
         /// Calculate a position to move towards another <see langword="Vector2"/>
         /// </summary>
-        public Vector2 MoveTowards(Vector2 target, float step = 1f)
+        public Vector2 MoveTowards(Vector2 vector, float step = 1f)
         {
-            return new(X + Math.Sign(target.X - X) * step, Y + Math.Sign(target.Y - Y) * step);
+            return new(X + Math.Sign(vector.X - X) * step, Y + Math.Sign(vector.Y - Y) * step);
         }
 
         /// <summary>
-        /// Returns the length between this Vector2 and another Vector2
+        /// Calculate a position to move in direction of a specified angle
+        /// </summary>
+        public Vector2 MoveInDirection(double angle, float step = 1f)
+        {
+            return Add(new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle)).Multiply(new(step)));
+        }
+
+        /// <summary>
+        /// Calculate the angle of another <see langword="Vector2"/> relative to this object
+        /// </summary>
+        public double GetRelativeAngle(Vector2 vector)
+        {
+            return Math.Atan2(vector.Y - Y, vector.X - X);
+        }
+
+        /// <summary>
+        /// Returns the distance between this Vector2 and another Vector2
         /// </summary>
         public double HowFarIs(Vector2 vector)
         {
