@@ -25,6 +25,10 @@ namespace KudoGame
         readonly List<ExpandableObject> bullets = new();
         readonly float bulletSpeed = 15f;
 
+        // gun
+        Sprite2D gun;
+        BoxCollider2D gunCollider;
+
         // Enemies
         readonly int maxEnemies = 5;
         readonly int spawnDelay = 75;
@@ -45,8 +49,13 @@ namespace KudoGame
             player = new Sprite2D(new(), new(85, 85), BitmapFromFile("Sprites/Bro"));
             playerCollider = new BoxCollider2D(player, "player", new(-20f,-10f));
 
+            // Gun
+            gun = new Sprite2D(new(), new(50, 50), BitmapFromFile("Sprites/gun"));
+            gunCollider = new BoxCollider2D(gun);
+
+
             // UI
-            healthText = new Text2D(new(10, 10), new(100, 20), healthTextString + playerHealth, Color.Red, default, "HealthText", 1000);
+            healthText = new Text2D(new(10, 10), new(100, 20), healthTextString + playerHealth, Color.Red, default, default, "HealthText", 1000);
         }
 
         public override void Update()
@@ -72,6 +81,12 @@ namespace KudoGame
             player.Position.Y += MovementSpeed * axis.Y;
             player.Position.X += MovementSpeed * axis.X;
 
+            // Gun Behavior
+            float relativeMouseAngle = gun.Position.Add(gun.Scale.Divide(new(2f))).GetRelativeAngle(Input.MousePosition);
+            gun.Position = player.Center().Subtract(gun.Scale.Divide(new(2f)));
+            gun.Position = gun.Position.MoveInDirection(relativeMouseAngle, 85f);
+            gun.Rotation = DegreesFromRadians(gun.Position.GetRelativeAngle(Input.MousePosition)) + 180f;
+
             // Enemy Spawn System
             if (Timer % spawnDelay == 0 && enemies.Count < maxEnemies)
             {
@@ -87,7 +102,7 @@ namespace KudoGame
             }
 
             // Enemy Behaviour
-            foreach (ExpandableObject enemy in enemies)
+            foreach (ExpandableObject enemy in enemies.ToList())
             {
                 // Move Towards Player
                 enemy.Get("sprite").Position = enemy.Get("sprite").Position.MoveTowards(player.Position, 1f);
@@ -134,7 +149,7 @@ namespace KudoGame
             {
 
                 ExpandableObject bullet = new();
-                bullet.Set("sprite", new Sprite2D(new(player.Center().X - 10, player.Center().Y - 10), new(20, 20), BitmapFromFile("Sprites/Bullet")));
+                bullet.Set("sprite", new Sprite2D(new(gun.Center().X, gun.Center().Y), new(20, 20), BitmapFromFile("Sprites/Bullet")));
                 bullet.Set("collider", new BoxCollider2D(bullet.Get("sprite"), "bullet"));
                 bullet.Set("direction", angle);
                 bullet.Set("active", true);

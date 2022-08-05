@@ -1,6 +1,6 @@
 ﻿namespace KudoEngine
 {
-    public class Button2D : RenderedObject2D
+    public class Button2D
     {
         public RenderedObject2D BaseObject { get; private set; }
         public Text2D Text { get; private set; }
@@ -9,15 +9,11 @@
         {
             BaseObject = baseObject;
             Text = text ?? new(BaseObject.Position, BaseObject.Scale, "", Color.Black);
-
-            Position = BaseObject.Position;
-            Scale = BaseObject.Scale;
-            Tag = "Button2D";
         }
 
         public bool IsHovered()
         {
-            return Input.MouseOver(this);
+            return Input.MouseOver(BaseObject);
         }
 
         public bool IsPressed()

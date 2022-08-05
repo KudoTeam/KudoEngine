@@ -119,19 +119,20 @@
         /// <summary>
         /// Calculate the angle of another <see langword="Vector2"/> relative to this object
         /// </summary>
-        public double GetRelativeAngle(Vector2 vector)
+        /// <returns>Radians</returns>
+        public float GetRelativeAngle(Vector2 vector)
         {
-            return Math.Atan2(vector.Y - Y, vector.X - X);
+            return (float)Math.Atan2(vector.Y - Y, vector.X - X);
         }
 
         /// <summary>
         /// Returns the distance between this Vector2 and another Vector2
         /// </summary>
-        public double HowFarIs(Vector2 vector)
+        public float HowFarIs(Vector2 vector)
         {
             // Pythagorean theorem
             Vector2 tmp = Subtract(vector).Abs().Pow(2);
-            return Math.Sqrt(tmp.X + tmp.Y);
+            return (float)Math.Sqrt(tmp.X + tmp.Y);
         }
     }
 }

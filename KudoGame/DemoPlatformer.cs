@@ -112,19 +112,19 @@ namespace KudoGame
                 {
                     if (Map[j, i] == "g")
                     {
-                        _ = new BoxCollider2D(new Shape2D(new((i * tileSize.X),(j * tileSize.Y)), tileSize, Color.DarkGreen, "Ground"), "tiles");
+                        _ = new BoxCollider2D(new Shape2D(new((i * tileSize.X),(j * tileSize.Y)), tileSize, Color.DarkGreen, default, "Ground"), "tiles");
                     }
                     else if (Map[j, i] == "p")
                     {
-                        _ = new BoxCollider2D(new Sprite2D(new((i * tileSize.X),(j * tileSize.Y)), tileSize, BitmapFromFile("Sprites/plank"), "Wood"), "tiles");
+                        _ = new BoxCollider2D(new Sprite2D(new((i * tileSize.X),(j * tileSize.Y)), tileSize, BitmapFromFile("Sprites/plank"), default, "Wood"), "tiles");
                     }
                     else if (Map[j, i] == "c")
                     {
-                        _ = new BoxCollider2D(new Sprite2D(new((i * tileSize.X),(j * tileSize.Y)), tileSize, s.GetSprite("coin"), "Coin"), "collectible");
+                        _ = new BoxCollider2D(new Sprite2D(new((i * tileSize.X),(j * tileSize.Y)), tileSize, s.GetSprite("coin"), default, "Coin"), "collectible");
                     }
                     else if (Map[j, i] == "b")
                     {
-                        new BoxCollider2D(new Sprite2D(new(i * ScreenSize.X / gridSize.X, j * ScreenSize.Y / gridSize.Y), new(ScreenSize.X / gridSize.X, ScreenSize.Y / gridSize.Y), BitmapFromFile("Sprites/bush"), "Bush", 1), "bushes");
+                        new BoxCollider2D(new Sprite2D(new(i * ScreenSize.X / gridSize.X, j * ScreenSize.Y / gridSize.Y), new(ScreenSize.X / gridSize.X, ScreenSize.Y / gridSize.Y), BitmapFromFile("Sprites/bush"), default, "Bush", 1), "bushes");
                     }
                 }
             }
@@ -138,7 +138,7 @@ namespace KudoGame
 
             ActiveCamera = cam1;
 
-            Shape2D someButton = new(new(10, 10), new(50, 50), Color.Red, "button", 1000);
+            Shape2D someButton = new(new(10, 10), new(50, 50), Color.Red, default, "button", 1000);
 
             s.AddSprite("coin", new(new(225, 385), new(35, 30)));
 
@@ -151,9 +151,9 @@ namespace KudoGame
             MapGen();
             MapRender();
 
-            eoc = new(new(550, 200), new(400, 200), BitmapFromFile("Sprites/eoc"), "Boss");
+            eoc = new(new(550, 200), new(400, 200), BitmapFromFile("Sprites/eoc"), default, "Boss");
             eocCollider = new(eoc, "bosses", new(-30f, -30f));
-            player = new(new(150, 150), new(70, 100), ad.GetSprite("idle"), "Player");
+            player = new(new(150, 150), new(70, 100), ad.GetSprite("idle"), default, "Player");
             playerCollider = new(player, "player", new(-17.5f, -3f), new(-1f,0f));
             playerPhysics = new Physics2D(playerCollider, new(new string[] { "tiles" }));
             playerPhysics.Weight = 10f;
@@ -190,7 +190,6 @@ namespace KudoGame
             }
             if (left)
             {
-                // TODO: Implement this as an Object
                 if (Timer % 5 == 0)
                 {
                     animation++;

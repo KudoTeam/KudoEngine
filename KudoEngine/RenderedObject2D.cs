@@ -7,6 +7,7 @@ namespace KudoEngine
     {
         public Vector2 Position { get; set; } = new();
         public Vector2 Scale { get; set; } = new();
+        public float Rotation { get; set; } = 0f;
         /// <summary>
         /// A cosmetic tag for debugging
         /// </summary>
@@ -26,6 +27,7 @@ namespace KudoEngine
             return new(Position.X + Scale.X / 2, Position.Y + Scale.Y / 2);
         }
 
+        // TODO: Kill it properly
         public bool Kill()
         {
             if (Kudo.RenderedObjects2D.Contains(this))

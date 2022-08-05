@@ -38,6 +38,8 @@
         }
 
         // Every compatible type needs to be added
+        
+        // TODO: Add Rotation
 
         #region IsColliding
         /// <summary>

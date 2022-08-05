@@ -74,7 +74,7 @@ namespace KudoEngine
         // Abort thread when quitting to avoid memory leaks
         private void Quit(object? sender, FormClosingEventArgs e)
         {
-            // TODO: Abort thread
+            // Abort thread here?
         }
 
         #region Input
@@ -129,7 +129,7 @@ namespace KudoEngine
 
         private void InputMouseMove(object? sender, MouseEventArgs e)
         {
-            // TODO: Compatibility with Rotation and Zoom
+            // TODO: Compatibility with camera Rotation and Zoom
             Input.MousePosition = new(e.Location.X - ScreenSize.X / 2 + ActiveCamera.Position.X,
                 e.Location.Y - ScreenSize.Y / 2 + ActiveCamera.Position.Y);
 
@@ -191,17 +191,19 @@ namespace KudoEngine
         // It draws stuff
         private void Renderer(object? sender, PaintEventArgs e)
         {
-            // Camera origin points (to get center)
-            Vector2 Move = ActiveCamera.Position;
-
             Graphics g = e.Graphics;
             // Unblur small resolution sprites
             g.InterpolationMode = InterpolationMode.NearestNeighbor;
+            // Display full object (it cuts off a certain part without this)
+            g.PixelOffsetMode = PixelOffsetMode.Half;
             // Clear screen
             g.Clear(Skybox);
             #region Camera
             void ApplyCamera()
             {
+                // Camera origin points (to get center)
+                Vector2 Move = ActiveCamera.Position;
+
                 // Adjust Camera Position
                 g.TranslateTransform(-ActiveCamera.Position.X + ScreenSize.X / 2f, -ActiveCamera.Position.Y + ScreenSize.Y / 2f);
                 // Adjust Camera Rotation
@@ -246,6 +248,12 @@ namespace KudoEngine
             {
                 // Apply Camera Effects (unless disabled with layer 1000)
                 if (rendered.Layer != 1000) { ApplyCamera(); }
+
+                // Rotate based or the Rotation property
+                Vector2 Move = rendered.Position.Add(rendered.Scale.Divide(new(2f)));
+                g.TranslateTransform(Move.X, Move.Y);
+                g.RotateTransform(rendered.Rotation);
+                g.TranslateTransform(-Move.X, -Move.Y);
 
                 // Draw RenderedObjects2D
                 switch (rendered) {
@@ -310,10 +318,31 @@ namespace KudoEngine
         public virtual void MouseMove(MouseEventArgs e) { }
 
         #region Additional Methods
+        /// <summary>
+        /// Convert a .png image to a Bitmap type
+        /// </summary>
         public static Bitmap BitmapFromFile(string filename)
         {
             Image tmp = Image.FromFile($"Assets/{filename}.png");
             return new Bitmap(tmp);
+        }
+
+        /// <summary>
+        /// Convert a radian value to degrees
+        /// </summary>
+        /// <returns>Angle</returns>
+        public static float DegreesFromRadians(float value)
+        {
+            return 180f / (float)Math.PI * value;
+        }
+
+        /// <summary>
+        /// Convert angle in degrees to a radian value
+        /// </summary>
+        /// <returns>Radians</returns>
+        public static float RadiansFromDegrees(float value)
+        {
+            return (float)Math.PI * value / 180f;
         }
         #endregion
     }
