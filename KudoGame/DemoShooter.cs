@@ -55,7 +55,7 @@ namespace KudoGame
 
 
             // UI
-            healthText = new Text2D(new(10, 10), new(100, 20), healthTextString + playerHealth, Color.Red, default, default, "HealthText", 1000);
+            healthText = new Text2D(new(10), new(100, 20), healthTextString + playerHealth, Color.Red, default, default, "HealthText", 1000);
         }
 
         public override void Update()
@@ -88,7 +88,7 @@ namespace KudoGame
             gun.Rotation = DegreesFromRadians(gun.Position.GetRelativeAngle(Input.MousePosition)) + 180f;
 
             // Enemy Spawn System
-            if (Timer % spawnDelay == 0 && enemies.Count < maxEnemies)
+            if (Frame % spawnDelay == 0 && enemies.Count < maxEnemies)
             {
                 Random rnd = new Random();
 
@@ -108,10 +108,10 @@ namespace KudoGame
                 enemy.Get("sprite").Position = enemy.Get("sprite").Position.MoveTowards(player.Position, 1f);
 
                 // Damage Player
-                if (enemy.Get("collider").IsColliding(playerCollider) && immunityFrame < Timer - lastDamage && playerHealth > 0)
+                if (enemy.Get("collider").IsColliding(playerCollider) && immunityFrame < Frame - lastDamage && playerHealth > 0)
                 {
                     playerHealth--;
-                    lastDamage = Timer;
+                    lastDamage = Frame;
                     healthText.Text = healthTextString + playerHealth;
                 }
 

@@ -39,7 +39,7 @@
 
         // Every compatible type needs to be added
         
-        // TODO: Add Rotation
+        // TODO: Account for Rotation and Zoom
 
         #region IsColliding
         /// <summary>

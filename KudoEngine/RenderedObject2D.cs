@@ -1,7 +1,4 @@
-﻿using Microsoft.Win32.SafeHandles;
-using System.Runtime.InteropServices;
-
-namespace KudoEngine
+﻿namespace KudoEngine
 {
     public abstract class RenderedObject2D
     {
@@ -37,6 +34,15 @@ namespace KudoEngine
             IsAlive = false;
 
             return true;
+        }
+
+        /// <summary>
+        /// Get position relative to the camera's top left corner
+        /// </summary>
+        public Vector2 GetPositionOnCamera()
+        {
+            // TODO: Account for Rotation and Zoom
+            return Position.Subtract(Kudo.ScreenSize.Divide(new(2f)));
         }
     }
 }

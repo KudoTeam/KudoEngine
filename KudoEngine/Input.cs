@@ -71,7 +71,13 @@
         /// Check if mouse if over a <see langword="RenderedObject"/>
         /// </summary>
         public static bool MouseOver(RenderedObject2D rendered)
-        {
+        {   if (rendered.Layer == 1000)
+            {
+                return MousePosition.X >= rendered.GetPositionOnCamera().X &&
+                MousePosition.X <= rendered.GetPositionOnCamera().X + rendered.Scale.X
+                && MousePosition.Y >= rendered.GetPositionOnCamera().Y &&
+                MousePosition.Y <= rendered.GetPositionOnCamera().Y + rendered.Scale.Y;
+            }
             return MousePosition.X >= rendered.Position.X &&
                 MousePosition.X <= rendered.Position.X + rendered.Scale.X
                 && MousePosition.Y >= rendered.Position.Y &&

@@ -190,7 +190,7 @@ namespace KudoGame
             }
             if (left)
             {
-                if (Timer % 5 == 0)
+                if (Frame % 5 == 0)
                 {
                     animation++;
                     if (animation > 7)
@@ -203,7 +203,7 @@ namespace KudoGame
             }
             if (right)
             {
-                if (Timer % 5 == 0)
+                if (Frame % 5 == 0)
                 {
                     animation++;
                     if (animation > 7)

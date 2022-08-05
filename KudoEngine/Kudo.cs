@@ -1,4 +1,5 @@
 ﻿using System.Drawing.Drawing2D;
+using System.Diagnostics;
 
 namespace KudoEngine
 {
@@ -27,9 +28,13 @@ namespace KudoEngine
         /// </summary>
         public Camera ActiveCamera = new(new());
         /// <summary>
-        /// Increments after each frame
+        /// Current game window frame
         /// </summary>
-        public int Timer = 0;
+        public int Frame = 0;
+        /// <summary>
+        /// Global game timer
+        /// </summary>
+        public Stopwatch Time = new();
 
         public Kudo(Vector2? screenSize = null, string? title = null)
         {
@@ -129,7 +134,6 @@ namespace KudoEngine
 
         private void InputMouseMove(object? sender, MouseEventArgs e)
         {
-            // TODO: Compatibility with camera Rotation and Zoom
             Input.MousePosition = new(e.Location.X - ScreenSize.X / 2 + ActiveCamera.Position.X,
                 e.Location.Y - ScreenSize.Y / 2 + ActiveCamera.Position.Y);
 
@@ -141,6 +145,8 @@ namespace KudoEngine
         void GameLoop()
         {
             Load();
+            // Start Time Stopwatch
+            Time.Start();
             while (GameLoopThread.IsAlive)
             {
                 try
@@ -149,7 +155,7 @@ namespace KudoEngine
                     Draw();
                     Window.BeginInvoke((MethodInvoker) delegate { Window.Refresh(); });
                     Update();
-                    Timer++;
+                    Frame++;
                     Thread.Sleep(1);
                 }
                 catch

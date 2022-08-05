@@ -1,19 +1,21 @@
 ﻿namespace KudoEngine
 {
+    /// <summary>
+    /// <see langword="Kudo"/>
+    /// Simple implementation of a button
+    /// </summary>
     public class Button2D
     {
-        public RenderedObject2D BaseObject { get; private set; }
-        public Text2D Text { get; private set; }
+        public RenderedObject2D Rendered { get; private set; }
 
-        public Button2D (RenderedObject2D baseObject, Text2D? text = null)
+        public Button2D (RenderedObject2D baseObject)
         {
-            BaseObject = baseObject;
-            Text = text ?? new(BaseObject.Position, BaseObject.Scale, "", Color.Black);
+            Rendered = baseObject;
         }
 
         public bool IsHovered()
         {
-            return Input.MouseOver(BaseObject);
+            return Input.MouseOver(Rendered);
         }
 
         public bool IsPressed()

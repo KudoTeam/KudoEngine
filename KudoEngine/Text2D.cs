@@ -27,7 +27,7 @@ namespace KudoEngine
             Text = text;
             Color = color;
             Rotation = rotation;
-            Font = font ?? new("Arial", Scale.X / Text.Length);
+            Font = font ?? new("Arial", 10);
             Tag = tag;
             Layer = Math.Clamp(layer, -999, 1000);
 
