@@ -1,3 +1,5 @@
+![Development Stopped](https://img.shields.io/badge/Development-Stopped-red)
+
 For more info, see the [wiki](https://github.com/KudoTeam/Documentation/wiki).
 
 # Why KudoEngine?
