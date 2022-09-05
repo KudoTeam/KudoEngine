@@ -7,7 +7,7 @@
 		<Nullable>enable</Nullable>
 		<UseWindowsForms>true</UseWindowsForms>
 		<PlatformTarget>x64</PlatformTarget>
-		<Version>0.0.4</Version>
+		<Version>0.0.5</Version>
 		<Authors>Jakub Gustafik</Authors>
 		<Copyright>Copyright (c) 2022 Jakub Gustafik</Copyright>
 		<Description>A low-level 2D C# game engine.</Description>
