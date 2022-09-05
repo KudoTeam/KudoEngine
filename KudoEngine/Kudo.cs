@@ -27,14 +27,15 @@ namespace KudoEngine
         /// Current Camera
         /// </summary>
         public Camera ActiveCamera = new(new());
+        // Readable by the user
         /// <summary>
         /// Current game window frame
         /// </summary>
-        public int Frame = 0;
+        public int Frame { get; private set; } = 0;
         /// <summary>
         /// Global game timer
         /// </summary>
-        public Stopwatch Time = new();
+        public Time Time { get; private set; } = new();
 
         public Kudo(Vector2? screenSize = null, string? title = null)
         {
@@ -145,8 +146,6 @@ namespace KudoEngine
         void GameLoop()
         {
             Load();
-            // Start Time Stopwatch
-            Time.Start();
             while (GameLoopThread.IsAlive)
             {
                 try
@@ -155,7 +154,14 @@ namespace KudoEngine
                     Draw();
                     Window.BeginInvoke((MethodInvoker) delegate { Window.Refresh(); });
                     Update();
+                    #region Update Frames
+                    // Count frames
                     Frame++;
+                    #endregion
+                    #region Update Time
+                    // This makes DeltaTime work
+                    Time.Update();
+                    #endregion
                     Thread.Sleep(1);
                 }
                 catch

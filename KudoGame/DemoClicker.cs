@@ -114,7 +114,7 @@ namespace KudoGame
         public override void Update()
         {
             // spin cookie
-            cookie.Button.Rendered.Rotation += 1f;
+            cookie.Button.Rendered.Rotation += 50f * Time.DeltaTimeSeconds;
 
             // hover effect
             if (cookie.Button.IsHovered() )
@@ -150,7 +150,7 @@ namespace KudoGame
             {
                 if (autoClicker.Buy(score, out int cost)) { score -= cost; }
             }
-            if (Time.ElapsedMilliseconds  == 0) { score += autoClicker.Amount; }
+            if (Time.Elapsed  == 0) { score += autoClicker.Amount; }
             // ================================================
             if (luckPotion.IsClicked())
             {
