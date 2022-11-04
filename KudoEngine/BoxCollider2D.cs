@@ -21,7 +21,7 @@
         public Vector2 PositionModifier { get; set; }
 
 
-        private readonly Vector2 _lastPosition = new();
+        private Vector2 _lastPosition = new();
 
         /// <summary>
         /// Initialize a new BoxCollider2D for a RenderedObject2D
@@ -183,11 +183,8 @@
                 Rendered.Position.Y = _lastPosition.Y;
                 return true;
             }
-            else
-            {
-                _lastPosition.Y = Rendered.Position.Y;
-                return false;
-            }
+            _lastPosition.Y = Rendered.Position.Y;
+            return false;
         }
 
         /// <summary>
@@ -197,14 +194,15 @@
         /// <param name="collider">The collider that returned true</param>
         public bool StopVerticalCollision(out BoxCollider2D? collider, List<string>? tags = null)
         {
-                if (IsColliding(out BoxCollider2D? collision, tags))
+            if (IsColliding(out BoxCollider2D? collision, tags))
+            {
+                if (collision != null)
                 {
-                    if (collision != null)
-                    {
-                        collider = collision;
-                        return StopVerticalCollision(collider);
-                    }
+                    collider = collision;
+                    return StopVerticalCollision(collider);
                 }
+            }
+            _lastPosition.Y = Rendered.Position.Y;
             collider = null;
             return false;
         }
@@ -272,6 +270,7 @@
                     return StopHorizontalCollision(collider);
                 }
             }
+            _lastPosition.X = Rendered.Position.X;
             collider = null;
             return false;
         }
