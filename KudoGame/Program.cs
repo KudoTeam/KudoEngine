@@ -6,8 +6,8 @@ namespace KudoGame
     {
         static void Main()
         {
-            //DemoClicker _ = new();
-            DemoPlatformer _ = new();
+            DemoClicker _ = new();
+            //DemoPlatformer _ = new();
             //DemoShooter _ = new();
         }
     }

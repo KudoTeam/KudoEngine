@@ -80,7 +80,9 @@ namespace KudoEngine
         // Abort thread when quitting to avoid memory leaks
         private void Quit(object? sender, FormClosingEventArgs e)
         {
-            // Abort thread here?
+            // ZERO MEMORY LEAKS MODE ACTIVATED (i hope)
+            Application.ExitThread();
+            Environment.Exit(200);
         }
 
         #region Input
