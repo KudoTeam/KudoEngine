@@ -1,6 +1,6 @@
 ![Development Stopped](https://img.shields.io/badge/Development-Stopped-red)
 
-For more info, see the [wiki](https://github.com/KudoTeam/Documentation/wiki).
+For more info, see the [wiki](https://github.com/kubgus/KudoEngine/wiki).
 
 # Why KudoEngine?
 KudoEngine is a low-level 2D game engine with everything you need to make a good game.  
