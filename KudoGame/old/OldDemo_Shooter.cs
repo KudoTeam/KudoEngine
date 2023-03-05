@@ -4,9 +4,9 @@ namespace KudoGame
 {
     // This is good engine code
     // You can copy this to your own game
-    internal class DemoShooter : Kudo
+    internal class OldDemo_Shooter : Kudo
     {
-        public DemoShooter() : base(new Vector2(600, 600), "Shooter Game") { }
+        public OldDemo_Shooter() : base(new Vector2(600, 600), "Shooter Game") { }
 
         // === VARIABLES === //
 

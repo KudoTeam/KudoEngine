@@ -5,9 +5,9 @@
 // Don't copy this to your own game
 namespace KudoGame
 {
-    internal class DemoPlatformer : Kudo
+    internal class OldDemo_Platformer : Kudo
     {
-        public DemoPlatformer() : base(new Vector2(1080, 607), "Kudo Test Demo") { }
+        public OldDemo_Platformer() : base(new Vector2(1080, 607), "Kudo Test Demo") { }
 
         bool left;
         bool right;

@@ -154,6 +154,9 @@ namespace KudoEngine
                 {
                     // Constantly refresh window
                     Draw();
+                    #region Invoke ScriptBehaviours Draw
+                    foreach (ScriptBehaviour behaviour in ScriptBehaviours) { behaviour.Draw(); }
+                    #endregion
                     Window.BeginInvoke((MethodInvoker) delegate { Window.Refresh(); });
                     Update();
                     #region Update Frames
@@ -163,6 +166,9 @@ namespace KudoEngine
                     #region Update Time
                     // This makes DeltaTime work
                     Time.Update();
+                    #endregion
+                    #region Invoke ScriptBehaviours Update
+                    foreach (ScriptBehaviour behaviour in ScriptBehaviours) { behaviour.Update(); }
                     #endregion
                     Thread.Sleep(1);
                 }
@@ -184,6 +190,20 @@ namespace KudoEngine
         internal static void RemoveRender2D(RenderedObject2D rendered)
         {
             RenderedObjects2D.Remove(rendered);
+        }
+        #endregion
+
+        #region ScriptBehaviours
+        internal static List<ScriptBehaviour> ScriptBehaviours { get; private set; } = new();
+
+        internal static void AddScriptBehaviour(ScriptBehaviour behaviour)
+        {
+            ScriptBehaviours.Add(behaviour);
+        }
+
+        internal static void RemoveScriptBehaviour(ScriptBehaviour behaviour)
+        {
+            ScriptBehaviours.Remove(behaviour);
         }
         #endregion
 
