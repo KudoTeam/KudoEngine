@@ -1,4 +1,4 @@
-<img src="https://i.imgur.com/DUDDgXr.png" alt="Logo" width="200" align="right"/>
+<a href="https://github.com/kubgus/KudoEngine/wiki"><img src="https://i.imgur.com/DUDDgXr.png" alt="Logo" width="200" align="right"/></a>
 
 ![Development Stopped](https://img.shields.io/badge/Development-Stopped-red)
 
