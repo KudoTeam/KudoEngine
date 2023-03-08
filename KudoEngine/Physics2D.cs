@@ -40,6 +40,16 @@
         }
 
         /// <summary>
+        /// Initialize new Physics2D
+        /// </summary>
+        /// <param name="tag">Hitbox Tag this instance interacts with</param>
+        public Physics2D(BoxCollider2D collider, string tag)
+        {
+            Collider = collider;
+            Tags = new List<string>() { tag };
+        }
+
+        /// <summary>
         /// This updates physics (they don't work without it)
         /// </summary>
         public void Update()

@@ -66,7 +66,7 @@ namespace KudoGame
         {
             Shape = new Shape2D(position: new Vector2(0, 0), scale: new Vector2(40, 60), Color.Purple, tag: "Player", layer: 500);
             Collider = new BoxCollider2D(rendered: Shape, tag: "PlayerCollider");
-            Physics = new Physics2D(Collider, new List<string> { "WorldCollider" })
+            Physics = new Physics2D(Collider, "WorldCollider")
             {
                 Weight = 100f,
             };

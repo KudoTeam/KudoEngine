@@ -155,7 +155,7 @@ namespace KudoGame
             eocCollider = new(eoc, "bosses", new(-30f, -30f));
             player = new(new(150, 150), new(70, 100), ad.GetSprite("idle"), default, "Player");
             playerCollider = new(player, "player", new(-17.5f, -3f), new(-1f,0f));
-            playerPhysics = new Physics2D(playerCollider, new(new string[] { "tiles" }));
+            playerPhysics = new Physics2D(playerCollider, new List<string>() { "tiles" });
             playerPhysics.Weight = 10f;
             playerGroundCollider = new(player, "Ground Check", new(5f, 0f), new(0f, 1f));
 
