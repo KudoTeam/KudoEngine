@@ -6,7 +6,7 @@ namespace KudoGame
     {
         static void Main()
         {
-            _ = new OldDemo_Clicker();
+            _ = new Demo_Platformer();
         }
     }
 }

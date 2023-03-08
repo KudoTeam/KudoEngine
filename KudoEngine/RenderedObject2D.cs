@@ -14,6 +14,27 @@
         /// </summary>
         public int Layer { get; set; } = 0;
 
+        public Vector2 TopLeft
+        {
+            get { return Position; }
+            set { Position = value; }
+        }
+        public Vector2 TopRight
+        {
+            get { return new(Position.X - Scale.X, Position.Y); }
+            set { Position = new(value.X - Scale.X, value.Y); }
+        }
+        public Vector2 BottomLeft
+        {
+            get { return new(Position.X, Position.Y - Scale.Y); }
+            set { Position = new(value.X, value.Y - Scale.Y); }
+        }
+        public Vector2 BottomRight
+        {
+            get { return new(Position.X - Scale.X, Position.Y - Scale.Y); }
+            set { Position = new(value.X - Scale.X, value.Y - Scale.Y); }
+        }
+
         public bool IsAlive { get; private protected set; } = true;
 
         /// <summary>

@@ -27,6 +27,8 @@ namespace KudoGame
             };
 
             World ground = new(new Vector2(-100, 300), new Vector2(2000, 100), Color.Beige);
+            Shape2D obstacle = new(new(-100, 300), new(100), Color.Red);
+            
         }
 
         public override void Draw()
